@@ -1,6 +1,6 @@
 # Eoo Framework and BOM for server side libraries
 
-[![Actions Status](https://github.com/elieof/eoo/workflows/.github/workflows/gradle.yml/badge.svg)](https://github.com/elieof/eoo/actions)
+[![Java CI with Gradle](https://github.com/elieof/eoo/workflows/Java%20CI%20with%20Gradle/badge.svg)](https://github.com/elieof/eoo/actions)
 
 Created using Gradle Kotlin 
 
