@@ -17,8 +17,8 @@ plugins {
 //    id("org.jetbrains.kotlin.jvm") version "1.3.72"
 //    id("org.jetbrains.kotlin.plugin.spring") version "1.3.72"
 
-//    id("org.springframework.boot") version "2.2.8.RELEASE"
-    id("io.spring.dependency-management") version "1.0.9.RELEASE"
+//    id("org.springframework.boot") version "2.2.8.RELEASE" apply false
+    id("io.spring.dependency-management") version "1.0.9.RELEASE" apply false
     id("org.jlleitschuh.gradle.ktlint") version "9.2.1"
     id("io.gitlab.arturbosch.detekt") version "1.10.0"
     id("org.sonarqube") version "2.8"
@@ -55,6 +55,24 @@ subprojects {
         plugin("io.spring.nohttp")
         plugin("org.jlleitschuh.gradle.ktlint")
         plugin("org.jlleitschuh.gradle.ktlint-idea")
+    }
+
+    configure<PublishingExtension> {
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/elieof/eoo")
+                credentials {
+                    username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
+                    password = project.findProperty("gpr.key") as String? ?: System.getenv("PASSWORD")
+                }
+            }
+        }
+        publications {
+            register<MavenPublication>("gpr") {
+                from(components["java"])
+            }
+        }
     }
 
     tasks.withType<KotlinCompile> {
