@@ -38,6 +38,12 @@ repositories {
     maven { url = uri("https://repo.spring.io/plugins-release") }
 }
 
+val signingKeyId: String? = project.findProperty("signingKeyId") as String? ?: System.getenv("SIGNING_KEY_ID")
+val signingKey: String? = project.findProperty("signingKey") as String?
+    ?: System.getenv("SIGNING_KEY")?.replace("\\n", System.lineSeparator())
+val signingPassword: String? = project.findProperty("signingPassword") as String? ?: System.getenv("SIGNING_PASSWORD")
+val repoUrl = "https://github.com/elieof/eoo"
+
 subprojects {
 
     repositories {
@@ -85,7 +91,6 @@ subprojects {
 
     val projectName = name
     val projectDescription = description
-    val repoUrl = "https://github.com/elieof/eoo"
     configure<PublishingExtension> {
         repositories {
             maven {
@@ -148,16 +153,7 @@ subprojects {
                 }
             }
             signing {
-                val signingKeyId: String? by project
-                val signingKey: String? by project
-                val signingPassword: String? by project
-                println("signingKeyId : $signingKeyId")
-                println("signingKeyId in env :" + System.getenv("MAVEN_SIGNING_KEY_ID"))
-                useInMemoryPgpKeys(
-                    signingKeyId ?: System.getenv("MAVEN_SIGNING_KEY_ID"),
-                    signingKey ?: System.getenv("MAVEN_SIGNING_KEY"),
-                    signingPassword ?: System.getenv("MAVEN_SIGNING_PASSWORD")
-                )
+                useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
                 sign(mavenPublication.get())
             }
         }

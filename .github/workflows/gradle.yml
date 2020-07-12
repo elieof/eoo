@@ -25,12 +25,12 @@ jobs:
     - name: Build with Gradle
       run: gradle build
     - name: Publish to GitHub Packages
-      run: gradle publish --stacktrace --debug --scan
+      run: gradle publish
       env:
         USERNAME: ${{ github.actor }}
         PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-        MAVEN_SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
-        MAVEN_SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-        MAVEN_SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+        SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
+        SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+        IGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
