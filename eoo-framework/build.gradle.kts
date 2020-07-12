@@ -1,4 +1,5 @@
-
+import java.io.FileInputStream
+import java.util.*
 
 plugins {
     jacoco
@@ -24,7 +25,7 @@ jacoco {
 checkstyle {
     toolVersion = "8.34"
     configFile = file("$rootDir/checkstyle.xml")
-//    tasks.checkstyleTest.get().enabled = true
+    tasks.checkstyleTest.get().enabled = true
 }
 
 detekt {
@@ -71,4 +72,16 @@ tasks.check {
 tasks.register<TestReport>("testReport") {
     destinationDir = file("$buildDir/reports/tests")
     reportOn(tasks.test)
+}
+
+val sonarFile = FileInputStream("$rootDir/sonar-project.properties")
+val sonarProperties = Properties()
+sonarProperties.load(sonarFile)
+
+sonarProperties.forEach { (key, value) ->
+    sonarqube {
+        properties {
+            property(key as String, value)
+        }
+    }
 }
