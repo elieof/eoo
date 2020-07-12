@@ -148,13 +148,13 @@ subprojects {
                 }
             }
             signing {
-                val signingKeyId: String? by project
-                val signingKey: String? by project
-                val signingPassword: String? by project
+                val signingKeyId = project.findProperty("signingKeyId") as String? ?: System.getenv("SIGNING_KEY_ID")
+                val signingKey = project.findProperty("signingKey") as String? ?: System.getenv("SIGNING_KEY")
+                val signingPassword = project.findProperty("signingPassword") as String? ?: System.getenv("SIGNING_PASSWORD")
                 useInMemoryPgpKeys(
-                    signingKeyId ?: System.getenv("SIGNING_KEY_ID"),
-                    signingKey ?: System.getenv("SIGNING_KEY"),
-                    signingPassword ?: System.getenv("SIGNING_PASSWORD")
+                    signingKeyId,
+                    signingKey,
+                    signingPassword
                 )
                 sign(mavenPublication.get())
             }
