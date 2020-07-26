@@ -1,4 +1,3 @@
-import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
@@ -11,23 +10,21 @@ buildscript {
 }
 
 plugins {
-    kotlin("jvm") version "1.3.72"
-    kotlin("plugin.spring") version "1.3.72"
-//    id("org.jetbrains.kotlin.jvm") version "1.3.72"
-//    id("org.jetbrains.kotlin.plugin.spring") version "1.3.72"
+    kotlin("jvm") version kotlinVersion
+    kotlin("plugin.spring") version kotlinVersion apply false
 
-//    id("org.springframework.boot") version "2.2.8.RELEASE" apply false
-    id("io.spring.dependency-management") version "1.0.9.RELEASE" apply false
-    id("org.jlleitschuh.gradle.ktlint") version "9.2.1"
-    id("io.gitlab.arturbosch.detekt") version "1.10.0"
-    id("org.sonarqube") version "2.8" apply false
-    id("io.spring.nohttp") version "0.0.5.RELEASE"
-    id("org.jetbrains.dokka") version "0.10.1" apply false
+    id("org.springframework.boot") version springBootVersion apply false
+    id("io.spring.dependency-management") version springDependenciesManagementVersion apply false
+    id("org.jlleitschuh.gradle.ktlint") version klintVersion
+    id("io.gitlab.arturbosch.detekt") version detektVersion
+    id("org.sonarqube") version sonarqubeVersion apply false
+    id("io.spring.nohttp") version nohttpVersion
+    id("org.jetbrains.dokka") version dokkaVersion apply false
     signing
 }
 
 allprojects {
-    group = "com.fahkap.eoo"
+    group = "io.github.elieof.eoo"
     version = "0.0.1-SNAPSHOT"
 }
 
@@ -39,27 +36,24 @@ repositories {
 }
 
 //val signingKeyId: String? = project.findProperty("signingKeyId") as String? ?: System.getenv("SIGNING_KEY_ID")
-val signingKey: String? = project.findProperty("signingKey") as String?
-    ?: System.getenv("SIGNING_KEY")?.replace("\\n", System.lineSeparator())
-val signingPassword: String? = project.findProperty("signingPassword") as String? ?: System.getenv("SIGNING_PASSWORD")
-val repoUrl = "https://github.com/elieof/eoo"
-println(signingPassword)
-println(signingKey)
+
+
 subprojects {
 
     repositories {
         mavenLocal()
         mavenCentral()
+        jcenter()
         gradlePluginPortal()
         maven { url = uri("https://repo.spring.io/plugins-release") }
     }
 
     apply {
         plugin("idea")
-        plugin("java")
+//        plugin("java")
         plugin("maven")
         plugin("maven-publish")
-        plugin("io.spring.dependency-management")
+//        plugin("io.spring.dependency-management")
         plugin("io.spring.nohttp")
         plugin("org.jlleitschuh.gradle.ktlint")
         plugin("org.jlleitschuh.gradle.ktlint-idea")
@@ -67,31 +61,11 @@ subprojects {
         plugin("signing")
     }
 
-    configure<JavaPluginConvention> {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+    tasks.withType<JavaCompile> {
+        sourceCompatibility = "11"
+        targetCompatibility = "11"
     }
 
-    val dokkaTasks = tasks.withType<DokkaTask> {
-        outputFormat = "html"
-        outputDirectory = "$buildDir/javadoc"
-
-    }
-
-    val dokkaJar by tasks.creating(Jar::class) {
-        group = JavaBasePlugin.DOCUMENTATION_GROUP
-        description = "Assembles Kotlin docs with Dokka"
-        archiveClassifier.set("javadoc")
-        from(dokkaTasks)
-    }
-
-    val sourcesJar by tasks.creating(Jar::class) {
-        archiveClassifier.set("sources")
-        from(sourceSets.main.get().allSource)
-    }
-
-    val projectName = name
-    val projectDescription = description
     configure<PublishingExtension> {
         repositories {
             maven {
@@ -102,62 +76,18 @@ subprojects {
                     password = project.findProperty("gpr.key") as String? ?: System.getenv("PASSWORD")
                 }
             }
-//            maven {
-//                name = "OSSRH"
-//                val releasesRepoUrl = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
-//                val snapshotsRepoUrl = uri("https://oss.sonatype.org/content/repositories/snapshots")
-//                url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
-//                credentials {
-//                    username = project.findProperty("ossrh.user") as String? ?: System.getenv("MAVEN_USERNAME")
-//                    password = project.findProperty("ossrh.password") as String? ?: System.getenv("MAVEN_PASSWORD")
-//                }
-//            }
-        }
-        publications {
-            val mavenPublication = register<MavenPublication>(projectName) {
-                from(components["java"])
-                artifact(dokkaJar)
-                artifact(sourcesJar)
-                versionMapping {
-                    usage("java-api") {
-                        fromResolutionOf("runtimeClasspath")
-                    }
-                    usage("java-runtime") {
-                        fromResolutionResult()
-                    }
-                }
-                pom {
-                    name.set(projectName)
-                    description.set(projectDescription)
-                    url.set(repoUrl)
-                    licenses {
-                        license {
-                            name.set("The Apache License, Version 2.0")
-                            url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                        }
-                    }
-                    developers {
-                        developer {
-                            id.set("elieof")
-                            name.set("Olivier Ouemba")
-                            email.set("olivier.ouemba@hotmail.com")
-                        }
-                    }
-                    scm {
-                        connection.set("scm:git:$repoUrl")
-                        developerConnection.set("scm:git:$repoUrl")
-                        url.set(repoUrl)
-                    }
-                    issueManagement {
-                        url.set("https://hackerone.com/central-security-project/reports/new")
-                    }
+            maven {
+                name = "OSSRH"
+                val releasesRepoUrl = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+                val snapshotsRepoUrl = uri("https://oss.sonatype.org/content/repositories/snapshots")
+                url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+                credentials {
+                    username = project.findProperty("ossrh.user") as String? ?: System.getenv("MAVEN_USERNAME")
+                    password = project.findProperty("ossrh.password") as String? ?: System.getenv("MAVEN_PASSWORD")
                 }
             }
-            signing {
-                useInMemoryPgpKeys(signingKey, signingPassword)
-                sign(mavenPublication.get())
-            }
         }
+
     }
 
     tasks.withType<KotlinCompile> {
@@ -168,16 +98,10 @@ subprojects {
         dependsOn(tasks.ktlintFormat)
     }
 
-    tasks {
-        named("install") {
-            doLast {
-                println(jar.get().archiveFileName.get())
-            }
-        }
-    }
+
 
     ktlint {
-        ignoreFailures.value(true)
+        ignoreFailures.set(true)
     }
 }
 
@@ -186,5 +110,5 @@ nohttp {
 }
 
 ktlint {
-    ignoreFailures.value(true)
+    ignoreFailures.set(true)
 }
