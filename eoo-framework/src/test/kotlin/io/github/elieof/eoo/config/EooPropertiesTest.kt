@@ -1,4 +1,4 @@
-package io.github.elieof.eoo
+package io.github.elieof.eoo.config
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach

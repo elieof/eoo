@@ -1,10 +1,10 @@
-package io.github.elieof.eoo.logging
+package io.github.elieof.eoo.config.logging
 
 import ch.qos.logback.classic.LoggerContext
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.elieof.eoo.EooProperties
-import io.github.elieof.eoo.logging.LoggingUtils.addContextListener
-import io.github.elieof.eoo.logging.LoggingUtils.setMetricsMarkerLogbackFilter
+import io.github.elieof.eoo.config.EooProperties
+import io.github.elieof.eoo.config.logging.LoggingUtils.addContextListener
+import io.github.elieof.eoo.config.logging.LoggingUtils.setMetricsMarkerLogbackFilter
 import net.logstash.logback.encoder.LogstashEncoder
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value

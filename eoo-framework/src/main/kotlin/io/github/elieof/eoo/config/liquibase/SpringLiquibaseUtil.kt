@@ -1,59 +1,57 @@
-package io.github.elieof.eoo.liquibase
+package io.github.elieof.eoo.config.liquibase
 
+import java.util.Optional
+import java.util.function.Supplier
+import javax.sql.DataSource
 import liquibase.integration.spring.SpringLiquibase
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties
 import org.springframework.boot.autoconfigure.liquibase.DataSourceClosingSpringLiquibase
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties
 import org.springframework.boot.jdbc.DataSourceBuilder
-import org.springframework.core.env.Environment
-import java.util.Optional
-import java.util.concurrent.Executor
-import java.util.function.Supplier
-import javax.sql.DataSource
 
 /**
  * Utility class for handling SpringLiquibase.
  *
- * <p>
+ *
  * It follows implementation of
- * <a href="https://github.com/spring-projects/spring-boot/blob/master/spring-boot-project/spring-boot-autoconfigure/src/main/java/org/springframework/boot/autoconfigure/liquibase/LiquibaseAutoConfiguration.java">LiquibaseAutoConfiguration</a>.
+ * [LiquibaseAutoConfiguration](https://github.com/spring-projects/spring-boot/blob/master/spring-boot-project/spring-boot-autoconfigure/src/main/java/org/springframework/boot/autoconfigure/liquibase/LiquibaseAutoConfiguration.java)
  */
 object SpringLiquibaseUtil {
 
     fun createSpringLiquibase(
-        liquibaseDatasource: DataSource?,
-        liquibaseProperties: LiquibaseProperties,
-        dataSource: DataSource,
-        dataSourceProperties: DataSourceProperties
+        context: LiquibaseContext
     ): SpringLiquibase {
         val liquibase: SpringLiquibase
-        val liquibaseDataSource = getDataSource(liquibaseDatasource, liquibaseProperties, dataSource)
+        val liquibaseDataSource = getDataSource(
+            context.liquibaseDatasource, context.liquibaseProperties, context.dataSource
+        )
         if (liquibaseDataSource != null) {
             liquibase = SpringLiquibase()
             liquibase.dataSource = liquibaseDataSource
             return liquibase
         }
         liquibase = DataSourceClosingSpringLiquibase()
-        liquibase.setDataSource(createNewDataSource(liquibaseProperties, dataSourceProperties))
+        liquibase.setDataSource(
+            createNewDataSource(context.liquibaseProperties, context.dataSourceProperties)
+        )
         return liquibase
     }
 
     fun createAsyncSpringLiquibase(
-        env: Environment?,
-        executor: Executor?,
-        liquibaseDatasource: DataSource?,
-        liquibaseProperties: LiquibaseProperties,
-        dataSource: DataSource,
-        dataSourceProperties: DataSourceProperties
+        context: LiquibaseContext
     ): AsyncSpringLiquibase {
-        val liquibase = AsyncSpringLiquibase(executor, env)
-        val liquibaseDataSource =
-            getDataSource(liquibaseDatasource, liquibaseProperties, dataSource)
+        val liquibase = AsyncSpringLiquibase(context.executor, context.env)
+        val liquibaseDataSource = getDataSource(
+            context.liquibaseDatasource, context.liquibaseProperties, context.dataSource
+        )
         if (liquibaseDataSource != null) {
             liquibase.setCloseDataSourceOnceMigrated(false)
             liquibase.dataSource = liquibaseDataSource
         } else {
-            liquibase.dataSource = createNewDataSource(liquibaseProperties, dataSourceProperties)
+            liquibase.dataSource = createNewDataSource(
+                context.liquibaseProperties,
+                context.dataSourceProperties
+            )
         }
         return liquibase
     }
@@ -61,7 +59,7 @@ object SpringLiquibaseUtil {
     private fun getDataSource(
         liquibaseDataSource: DataSource?,
         liquibaseProperties: LiquibaseProperties,
-        dataSource: DataSource
+        dataSource: DataSource?
     ): DataSource? {
         if (liquibaseDataSource != null) {
             return liquibaseDataSource

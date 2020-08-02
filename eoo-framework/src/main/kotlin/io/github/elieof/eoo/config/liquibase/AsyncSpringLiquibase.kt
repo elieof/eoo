@@ -1,19 +1,19 @@
-package io.github.elieof.eoo.liquibase
+package io.github.elieof.eoo.config.liquibase
 
-import io.github.elieof.eoo.EooProfiles.Companion.SPRING_PROFILE_DEVELOPMENT
-import io.github.elieof.eoo.EooProfiles.Companion.SPRING_PROFILE_HEROKU
-import io.github.elieof.eoo.EooProfiles.Companion.SPRING_PROFILE_NO_LIQUIBASE
+import io.github.elieof.eoo.config.EooProfiles.Companion.SPRING_PROFILE_DEVELOPMENT
+import io.github.elieof.eoo.config.EooProfiles.Companion.SPRING_PROFILE_HEROKU
+import io.github.elieof.eoo.config.EooProfiles.Companion.SPRING_PROFILE_NO_LIQUIBASE
+import java.sql.SQLException
+import java.util.concurrent.Executor
 import liquibase.exception.LiquibaseException
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.liquibase.DataSourceClosingSpringLiquibase
 import org.springframework.core.env.Environment
 import org.springframework.core.env.Profiles
 import org.springframework.util.StopWatch
-import java.sql.SQLException
-import java.util.concurrent.Executor
 
-class AsyncSpringLiquibase(
-    private val executor: Executor?,
+open class AsyncSpringLiquibase(
+    val executor: Executor?,
     private val env: Environment?
 ) : DataSourceClosingSpringLiquibase() {
 
@@ -37,6 +37,9 @@ class AsyncSpringLiquibase(
         /** Constant `SLOWNESS_THRESHOLD=5`  */
         const val SLOWNESS_THRESHOLD: Long = 5 // seconds
 
+        /** Constant `NUMBER_1000L=1000L`  */
+        const val NUMBER_1000L: Long = 1000L
+
         /** Constant `SLOWNESS_MESSAGE="Warning, Liquibase took more than {} se"{trunked}`  */
         const val SLOWNESS_MESSAGE = "Warning, Liquibase took more than {} seconds to start up!"
     }
@@ -47,22 +50,7 @@ class AsyncSpringLiquibase(
         env?.let {
             if (!env.acceptsProfiles(Profiles.of(SPRING_PROFILE_NO_LIQUIBASE))) {
                 if (env.acceptsProfiles(Profiles.of("$SPRING_PROFILE_DEVELOPMENT|$SPRING_PROFILE_HEROKU"))) {
-                    // Prevent Thread Lock with spring-cloud-context GenericScope
-                    // https://github.com/spring-cloud/spring-cloud-commons/commit/aaa7288bae3bb4d6fdbef1041691223238d77b7b#diff-afa0715eafc2b0154475fe672dab70e4R328
-                    try {
-                        getDataSource().connection.use {
-                            executor?.execute {
-                                try {
-                                    logger.warn(STARTING_ASYNC_MESSAGE)
-                                    initDb()
-                                } catch (e: LiquibaseException) {
-                                    logger.error(EXCEPTION_MESSAGE, e.message, e)
-                                }
-                            }
-                        }
-                    } catch (e: SQLException) {
-                        logger.error(EXCEPTION_MESSAGE, e.message, e)
-                    }
+                    connect()
                 } else {
                     logger.debug(STARTING_SYNC_MESSAGE)
                     initDb()
@@ -73,6 +61,25 @@ class AsyncSpringLiquibase(
         }
     }
 
+    private fun connect() {
+        // Prevent Thread Lock with spring-cloud-context GenericScope
+        // https://github.com/spring-cloud/spring-cloud-commons/commit/aaa7288bae3bb4d6fdbef1041691223238d77b7b#diff-afa0715eafc2b0154475fe672dab70e4R328
+        return try {
+            getDataSource().connection.use {
+                executor?.execute {
+                    try {
+                        logger.warn(STARTING_ASYNC_MESSAGE)
+                        initDb()
+                    } catch (e: LiquibaseException) {
+                        logger.error(EXCEPTION_MESSAGE, e.message, e)
+                    }
+                }
+            }
+        } catch (e: SQLException) {
+            logger.error(EXCEPTION_MESSAGE, e.message, e)
+        }
+    }
+
     /**
      *
      * initDb.
@@ -80,13 +87,13 @@ class AsyncSpringLiquibase(
      * @throws liquibase.exception.LiquibaseException if any.
      */
     @Throws(LiquibaseException::class)
-    private fun initDb() {
+    open fun initDb() {
         val watch = StopWatch()
         watch.start()
         super.afterPropertiesSet()
         watch.stop()
         logger.debug(STARTED_MESSAGE, watch.totalTimeMillis)
-        if (watch.totalTimeMillis > SLOWNESS_THRESHOLD * 1000L) {
+        if (watch.totalTimeMillis > SLOWNESS_THRESHOLD * NUMBER_1000L) {
             logger.warn(SLOWNESS_MESSAGE, SLOWNESS_THRESHOLD)
         }
     }

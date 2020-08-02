@@ -1,4 +1,3 @@
-import org.springframework.boot.gradle.tasks.bundling.BootJar
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -29,11 +28,11 @@ configure<JavaPluginConvention> {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
-tasks.getByName<BootJar>("bootJar") {
+tasks.bootJar {
     enabled = false
 }
 
-tasks.getByName<Jar>("jar") {
+tasks.jar {
     enabled = true
 }
 
@@ -58,7 +57,7 @@ detekt {
     }
 }
 
-tasks.withType<Test> {
+tasks.test {
     useJUnitPlatform()
 
     testLogging {
@@ -67,17 +66,7 @@ tasks.withType<Test> {
     reports.html.isEnabled = false
 }
 
-tasks.withType<JacocoReport> {
-    doFirst {
-        println(sourceDirectories.from)
-    }
-    doLast {
-        println(sourceDirectories.from)
-    }
-
-    executionData(tasks.test)
-    classDirectories.from.addAll(sourceSets.main.get().output.classesDirs)
-    sourceDirectories.from.addAll(sourceSets.main.get().allSource.srcDirs)
+tasks.jacocoTestReport {
 
     reports {
         xml.isEnabled = true
@@ -105,7 +94,7 @@ sonarProperties.forEach { (key, value) ->
     }
 }
 
-val dokkaTasks = tasks.withType<org.jetbrains.dokka.gradle.DokkaTask> {
+tasks.dokka {
     outputFormat = "html"
     outputDirectory = "$buildDir/javadoc"
     configuration {
@@ -118,7 +107,7 @@ val dokkaJar by tasks.creating(Jar::class) {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
     description = "Assembles Kotlin docs with Dokka"
     archiveClassifier.set("javadoc")
-    from(dokkaTasks)
+    from(tasks.dokka)
 }
 
 val sourcesJar by tasks.creating(Jar::class) {
@@ -154,7 +143,7 @@ configure<PublishingExtension> {
                 licenses {
                     license {
                         name.set("The Apache License, Version 2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
                     }
                 }
                 developers {

@@ -1,4 +1,4 @@
-package io.github.elieof.eoo
+package io.github.elieof.eoo.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 
@@ -38,7 +38,8 @@ class EooProperties {
 
         val file = File()
 
-        val accessFile = File(EooDefaults.Logging.File.accessPrefix)
+        val accessFile =
+            File(EooDefaults.Logging.File.accessPrefix)
 
         class File(var prefix: String = EooDefaults.Logging.File.prefix) {
             var enabled = EooDefaults.Logging.File.enabled

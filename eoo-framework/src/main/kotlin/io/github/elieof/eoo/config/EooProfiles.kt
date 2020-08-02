@@ -1,4 +1,4 @@
-package io.github.elieof.eoo
+package io.github.elieof.eoo.config
 
 /**
  * Eoo profiles.

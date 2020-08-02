@@ -1,4 +1,4 @@
-package io.github.elieof.eoo.logging
+package io.github.elieof.eoo.config.logging
 
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.LoggerContext
@@ -8,15 +8,29 @@ import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.classic.spi.LoggerContextListener
 import ch.qos.logback.core.ConsoleAppender
 import ch.qos.logback.core.filter.EvaluatorFilter
-import ch.qos.logback.core.rolling.*
+import ch.qos.logback.core.rolling.FixedWindowRollingPolicy
+import ch.qos.logback.core.rolling.RollingFileAppender
+import ch.qos.logback.core.rolling.RollingPolicy
+import ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy
+import ch.qos.logback.core.rolling.TimeBasedRollingPolicy
+import ch.qos.logback.core.rolling.TriggeringPolicyBase
 import ch.qos.logback.core.spi.ContextAwareBase
 import ch.qos.logback.core.spi.FilterReply
 import ch.qos.logback.core.util.FileSize
-import io.github.elieof.eoo.EooProperties
+import io.github.elieof.eoo.config.EooProperties
 import net.logstash.logback.appender.LogstashTcpSocketAppender
 import net.logstash.logback.composite.ContextJsonProvider
 import net.logstash.logback.composite.GlobalCustomFieldsJsonProvider
-import net.logstash.logback.composite.loggingevent.*
+import net.logstash.logback.composite.loggingevent.ArgumentsJsonProvider
+import net.logstash.logback.composite.loggingevent.LogLevelJsonProvider
+import net.logstash.logback.composite.loggingevent.LoggerNameJsonProvider
+import net.logstash.logback.composite.loggingevent.LoggingEventFormattedTimestampJsonProvider
+import net.logstash.logback.composite.loggingevent.LoggingEventJsonProviders
+import net.logstash.logback.composite.loggingevent.LoggingEventPatternJsonProvider
+import net.logstash.logback.composite.loggingevent.MdcJsonProvider
+import net.logstash.logback.composite.loggingevent.MessageJsonProvider
+import net.logstash.logback.composite.loggingevent.StackTraceJsonProvider
+import net.logstash.logback.composite.loggingevent.ThreadNameJsonProvider
 import net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder
 import net.logstash.logback.encoder.LogstashEncoder
 import net.logstash.logback.stacktrace.ShortenedThrowableConverter
@@ -35,6 +49,7 @@ object LoggingUtils {
     private const val CONSOLE_APPENDER_NAME = "CONSOLE"
     private const val LOGSTASH_APPENDER_NAME = "LOGSTASH"
     private const val ASYNC_LOGSTASH_APPENDER_NAME = "ASYNC_LOGSTASH"
+    private const val LOGGER_NAME_LENGTH = 25
 
     /**
      *
@@ -117,7 +132,7 @@ object LoggingUtils {
      *
      * @param context a [ch.qos.logback.classic.LoggerContext] object.
      * @param customFields a [String] object.
-     * @param logstashProperties a [io.github.elieof.eoo.EooProperties.Logging.Logstash] object.
+     * @param logstashProperties a [io.github.elieof.eoo.config.EooProperties.Logging.Logstash] object.
      */
     fun addLogstashTcpSocketAppender(
         context: LoggerContext,
@@ -143,7 +158,7 @@ object LoggingUtils {
      *
      * @param context a [ch.qos.logback.classic.LoggerContext] object.
      * @param customFields a [String] object.
-     * @param properties a [io.github.elieof.eoo.EooProperties.Logging] object.
+     * @param properties a [io.github.elieof.eoo.config.EooProperties.Logging] object.
      */
     fun addContextListener(
         context: LoggerContext,
@@ -235,7 +250,7 @@ object LoggingUtils {
 
     private fun loggerNameJsonProvider(): LoggerNameJsonProvider {
         val loggerNameJsonProvider = LoggerNameJsonProvider()
-        loggerNameJsonProvider.shortenedLoggerNameLength = 25
+        loggerNameJsonProvider.shortenedLoggerNameLength = LOGGER_NAME_LENGTH
         return loggerNameJsonProvider
     }
 
