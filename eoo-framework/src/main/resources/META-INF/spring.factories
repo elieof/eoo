@@ -1,3 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  io.github.elieof.eoo.config.EooProperties,\
   io.github.elieof.eoo.config.logging.EooLoggingAutoConfiguration

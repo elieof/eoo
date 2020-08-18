@@ -1,0 +1,68 @@
+{
+    "properties": [
+        {
+            "name": "eoo.async.core-pool-size",
+            "defaultValue": 2
+        },
+        {
+            "name": "eoo.async.max-pool-size",
+            "defaultValue": 50
+        },
+        {
+            "name": "eoo.async.queue-capacity",
+            "defaultValue": 10000
+        },
+        {
+            "name": "eoo.http.cache.time-to-live-in-days",
+            "defaultValue": 1461
+        },
+        {
+            "name": "eoo.logging.access-file.dir",
+            "defaultValue": "java.io.tmpdir"
+        },
+        {
+            "name": "eoo.logging.access-file.max-history",
+            "defaultValue": 1
+        },
+        {
+            "name": "eoo.logging.access-file.prefix",
+            "defaultValue": "access"
+        },
+        {
+            "name": "eoo.logging.file.dir",
+            "defaultValue": "java.io.tmpdir"
+        },
+        {
+            "name": "eoo.logging.file.max-index",
+            "defaultValue": 10
+        },
+        {
+            "name": "eoo.logging.file.max-size",
+            "defaultValue": "10 MB"
+        },
+        {
+            "name": "eoo.logging.file.min-index",
+            "defaultValue": 1
+        },
+        {
+            "name": "eoo.logging.file.prefix",
+            "defaultValue": "application"
+        },
+        {
+            "name": "eoo.logging.logstash.host",
+            "defaultValue": "localhost"
+        },
+        {
+            "name": "eoo.logging.logstash.port",
+            "defaultValue": 5000
+        },
+        {
+            "name": "eoo.logging.logstash.queue-size",
+            "defaultValue": 512
+        },
+        {
+            "name": "eoo.metrics.logs.frequency-report",
+            "defaultValue": 60
+        }
+    ]
+}

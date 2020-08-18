@@ -1,6 +1,7 @@
 package io.github.elieof.eoo.config.liquibase
 
 import java.util.Optional
+import java.util.concurrent.Executor
 import java.util.function.Supplier
 import javax.sql.DataSource
 import liquibase.integration.spring.SpringLiquibase
@@ -8,10 +9,10 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties
 import org.springframework.boot.autoconfigure.liquibase.DataSourceClosingSpringLiquibase
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties
 import org.springframework.boot.jdbc.DataSourceBuilder
+import org.springframework.core.env.Environment
 
 /**
  * Utility class for handling SpringLiquibase.
- *
  *
  * It follows implementation of
  * [LiquibaseAutoConfiguration](https://github.com/spring-projects/spring-boot/blob/master/spring-boot-project/spring-boot-autoconfigure/src/main/java/org/springframework/boot/autoconfigure/liquibase/LiquibaseAutoConfiguration.java)
@@ -19,11 +20,14 @@ import org.springframework.boot.jdbc.DataSourceBuilder
 object SpringLiquibaseUtil {
 
     fun createSpringLiquibase(
-        context: LiquibaseContext
+        liquibaseDatasource: DataSource?,
+        liquibaseProperties: LiquibaseProperties,
+        dataSource: DataSource?,
+        dataSourceProperties: DataSourceProperties
     ): SpringLiquibase {
         val liquibase: SpringLiquibase
         val liquibaseDataSource = getDataSource(
-            context.liquibaseDatasource, context.liquibaseProperties, context.dataSource
+            liquibaseDatasource, liquibaseProperties, dataSource
         )
         if (liquibaseDataSource != null) {
             liquibase = SpringLiquibase()
@@ -32,25 +36,30 @@ object SpringLiquibaseUtil {
         }
         liquibase = DataSourceClosingSpringLiquibase()
         liquibase.setDataSource(
-            createNewDataSource(context.liquibaseProperties, context.dataSourceProperties)
+            createNewDataSource(liquibaseProperties, dataSourceProperties)
         )
         return liquibase
     }
 
     fun createAsyncSpringLiquibase(
-        context: LiquibaseContext
+        liquibaseDatasource: DataSource?,
+        liquibaseProperties: LiquibaseProperties,
+        dataSource: DataSource?,
+        dataSourceProperties: DataSourceProperties,
+        env: Environment,
+        executor: Executor
     ): AsyncSpringLiquibase {
-        val liquibase = AsyncSpringLiquibase(context.executor, context.env)
+        val liquibase = AsyncSpringLiquibase(executor, env)
         val liquibaseDataSource = getDataSource(
-            context.liquibaseDatasource, context.liquibaseProperties, context.dataSource
+            liquibaseDatasource, liquibaseProperties, dataSource
         )
         if (liquibaseDataSource != null) {
             liquibase.setCloseDataSourceOnceMigrated(false)
             liquibase.dataSource = liquibaseDataSource
         } else {
             liquibase.dataSource = createNewDataSource(
-                context.liquibaseProperties,
-                context.dataSourceProperties
+                liquibaseProperties,
+                dataSourceProperties
             )
         }
         return liquibase
@@ -74,16 +83,16 @@ object SpringLiquibaseUtil {
         dataSourceProperties: DataSourceProperties
     ): DataSource? {
         val url = getProperty(
-            Supplier { liquibaseProperties.url },
-            Supplier { dataSourceProperties.determineUrl() }
+            { liquibaseProperties.url },
+            { dataSourceProperties.determineUrl() }
         )
         val user = getProperty(
-            Supplier { liquibaseProperties.user },
-            Supplier { dataSourceProperties.determineUsername() }
+            { liquibaseProperties.user },
+            { dataSourceProperties.determineUsername() }
         )
         val password = getProperty(
-            Supplier { liquibaseProperties.password },
-            Supplier { dataSourceProperties.determinePassword() }
+            { liquibaseProperties.password },
+            { dataSourceProperties.determinePassword() }
         )
         return DataSourceBuilder.create().url(url).username(user).password(password).build()
     }

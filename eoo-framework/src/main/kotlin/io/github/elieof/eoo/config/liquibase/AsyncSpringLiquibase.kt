@@ -12,9 +12,12 @@ import org.springframework.core.env.Environment
 import org.springframework.core.env.Profiles
 import org.springframework.util.StopWatch
 
+/**
+ * Start Liquibase asynchronously When using profile [SPRING_PROFILE_DEVELOPMENT]
+ */
 open class AsyncSpringLiquibase(
-    val executor: Executor?,
-    private val env: Environment?
+    val executor: Executor,
+    private val env: Environment
 ) : DataSourceClosingSpringLiquibase() {
 
     companion object {
@@ -42,12 +45,11 @@ open class AsyncSpringLiquibase(
 
         /** Constant `SLOWNESS_MESSAGE="Warning, Liquibase took more than {} se"{trunked}`  */
         const val SLOWNESS_MESSAGE = "Warning, Liquibase took more than {} seconds to start up!"
+
+        private val logger = LoggerFactory.getLogger(AsyncSpringLiquibase::class.java)
     }
 
-    private val logger = LoggerFactory.getLogger(AsyncSpringLiquibase::class.java)
-
     override fun afterPropertiesSet() {
-        env?.let {
             if (!env.acceptsProfiles(Profiles.of(SPRING_PROFILE_NO_LIQUIBASE))) {
                 if (env.acceptsProfiles(Profiles.of("$SPRING_PROFILE_DEVELOPMENT|$SPRING_PROFILE_HEROKU"))) {
                     connect()
@@ -58,7 +60,6 @@ open class AsyncSpringLiquibase(
             } else {
                 logger.debug(DISABLED_MESSAGE)
             }
-        }
     }
 
     private fun connect() {
@@ -66,7 +67,7 @@ open class AsyncSpringLiquibase(
         // https://github.com/spring-cloud/spring-cloud-commons/commit/aaa7288bae3bb4d6fdbef1041691223238d77b7b#diff-afa0715eafc2b0154475fe672dab70e4R328
         return try {
             getDataSource().connection.use {
-                executor?.execute {
+                executor.execute {
                     try {
                         logger.warn(STARTING_ASYNC_MESSAGE)
                         initDb()

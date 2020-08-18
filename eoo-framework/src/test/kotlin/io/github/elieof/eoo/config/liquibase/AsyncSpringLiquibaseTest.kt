@@ -1,10 +1,9 @@
-package io.github.elieof.eoo.config.liquiabse
+package io.github.elieof.eoo.config.liquibase
 
 import io.github.elieof.eoo.config.EooProfiles.Companion.SPRING_PROFILE_DEVELOPMENT
 import io.github.elieof.eoo.config.EooProfiles.Companion.SPRING_PROFILE_HEROKU
 import io.github.elieof.eoo.config.EooProfiles.Companion.SPRING_PROFILE_NO_LIQUIBASE
 import io.github.elieof.eoo.config.EooProfiles.Companion.SPRING_PROFILE_PRODUCTION
-import io.github.elieof.eoo.config.liquibase.AsyncSpringLiquibase
 import io.github.elieof.eoo.config.liquibase.AsyncSpringLiquibase.Companion.NUMBER_1000L
 import io.github.elieof.eoo.config.liquibase.AsyncSpringLiquibase.Companion.SLOWNESS_THRESHOLD
 import io.github.elieof.eoo.test.LogbackRecorder
@@ -34,7 +33,7 @@ import org.springframework.mock.env.MockEnvironment
 
 class AsyncSpringLiquibaseTest {
 
-    private val exception = LiquibaseException("Eek")
+    private val exception = LiquibaseException("Error!")
 
     private lateinit var executor: SimpleAsyncTaskExecutor
     private lateinit var environment: ConfigurableEnvironment
@@ -168,13 +167,13 @@ class AsyncSpringLiquibaseTest {
     @Test
     fun testSlow() {
         environment.setActiveProfiles(SPRING_PROFILE_DEVELOPMENT, SPRING_PROFILE_HEROKU)
-        config.sleep = SLOWNESS_THRESHOLD * NUMBER_1000L + 100L
+        config.sleep = SLOWNESS_THRESHOLD * NUMBER_1000L + 500L
         var caught: Throwable?
 
         lock.withLock {
             caught = catchThrowable {
                 config.afterPropertiesSet()
-                condition.await(config.sleep + 100L, TimeUnit.MILLISECONDS)
+                condition.await(config.sleep + 500L, TimeUnit.MILLISECONDS)
             }
             assertThat(caught).isNull()
         }
@@ -236,11 +235,9 @@ class AsyncSpringLiquibaseTest {
 
         @Throws(LiquibaseException::class)
         override fun initDb() {
-            executor?.let {
-                synchronized(it) {
+                synchronized(executor) {
                     super.initDb()
                 }
-            }
         }
 
         // This should never happen

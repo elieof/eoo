@@ -23,6 +23,11 @@ plugins {
     signing
 }
 
+tasks.named<Wrapper>("wrapper") {
+    gradleVersion = "6.6"
+    distributionType = Wrapper.DistributionType.ALL
+}
+
 allprojects {
     group = "io.github.elieof.eoo"
     version = "0.0.1-SNAPSHOT"
@@ -35,8 +40,7 @@ repositories {
     maven { url = uri("https://repo.spring.io/plugins-release") }
 }
 
-//val signingKeyId: String? = project.findProperty("signingKeyId") as String? ?: System.getenv("SIGNING_KEY_ID")
-
+// val signingKeyId: String? = project.findProperty("signingKeyId") as String? ?: System.getenv("SIGNING_KEY_ID")
 
 subprojects {
 
@@ -87,18 +91,15 @@ subprojects {
                 }
             }
         }
-
     }
 
     tasks.withType<KotlinCompile> {
         kotlinOptions {
-            freeCompilerArgs = listOf("-Xjsr305=strict")
+            freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=all")
             jvmTarget = "11"
         }
         dependsOn(tasks.ktlintFormat)
     }
-
-
 
     ktlint {
         ignoreFailures.set(true)

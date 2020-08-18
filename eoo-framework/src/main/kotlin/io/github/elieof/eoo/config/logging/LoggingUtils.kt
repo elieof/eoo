@@ -1,6 +1,7 @@
 package io.github.elieof.eoo.config.logging
 
 import ch.qos.logback.classic.Level
+import ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME
 import ch.qos.logback.classic.LoggerContext
 import ch.qos.logback.classic.boolex.OnMarkerEvaluator
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder
@@ -18,6 +19,7 @@ import ch.qos.logback.core.spi.ContextAwareBase
 import ch.qos.logback.core.spi.FilterReply
 import ch.qos.logback.core.util.FileSize
 import io.github.elieof.eoo.config.EooProperties
+import java.net.InetSocketAddress
 import net.logstash.logback.appender.LogstashTcpSocketAppender
 import net.logstash.logback.composite.ContextJsonProvider
 import net.logstash.logback.composite.GlobalCustomFieldsJsonProvider
@@ -36,19 +38,19 @@ import net.logstash.logback.encoder.LogstashEncoder
 import net.logstash.logback.stacktrace.ShortenedThrowableConverter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.io.File
-import java.net.InetSocketAddress
 
 /**
  * Utility methods to add appenders to a [ch.qos.logback.classic.LoggerContext].
  */
 object LoggingUtils {
-    private val log: Logger = LoggerFactory.getLogger(LoggingUtils::class.java)
-    private const val FILE_APPENDER_NAME = "FILE"
-    private const val ACCESS_FILE_APPENDER_NAME = "ACCESS"
-    private const val CONSOLE_APPENDER_NAME = "CONSOLE"
-    private const val LOGSTASH_APPENDER_NAME = "LOGSTASH"
-    private const val ASYNC_LOGSTASH_APPENDER_NAME = "ASYNC_LOGSTASH"
+    private val logger: Logger = LoggerFactory.getLogger(LoggingUtils::class.java)
+    internal const val FILE_APPENDER_NAME = "FILE"
+    internal const val ACCESS_FILE_APPENDER_NAME = "ACCESS"
+    internal const val DEFAULT_CONSOLE_APPENDER_NAME = "console"
+    internal const val CONSOLE_APPENDER_NAME = "CONSOLE"
+    internal const val ASYNC_LOGSTASH_APPENDER_NAME = "ASYNC_LOGSTASH"
+    internal const val ACCESS_FILE_PATTERN = "%d{yyyy/MM/dd HH:mm:ss,SSS} [%thread] %-5level %logger{36} - %m%n"
+    internal const val LOGGER_LOGBOOK = "org.zalando.logbook"
     private const val LOGGER_NAME_LENGTH = 25
 
     /**
@@ -59,7 +61,7 @@ object LoggingUtils {
      * @param customFields a [String] object.
      */
     fun addJsonConsoleAppender(context: LoggerContext, customFields: String) {
-        log.info("Initializing Console loggingProperties")
+        logger.info("Initializing Console loggingProperties")
 
         // More documentation is available at: https://github.com/logstash/logstash-logback-encoder
         val consoleAppender: ConsoleAppender<ILoggingEvent> = ConsoleAppender()
@@ -68,9 +70,8 @@ object LoggingUtils {
 
         consoleAppender.name = CONSOLE_APPENDER_NAME
         consoleAppender.start()
-        context.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME)
-            .detachAppender(CONSOLE_APPENDER_NAME)
-        context.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME).addAppender(consoleAppender)
+        context.getLogger(ROOT_LOGGER_NAME).detachAppender(CONSOLE_APPENDER_NAME)
+        context.getLogger(ROOT_LOGGER_NAME).addAppender(consoleAppender)
     }
 
     /**
@@ -81,25 +82,31 @@ object LoggingUtils {
      */
     fun addFileAppender(
         context: LoggerContext,
-        fileProperties: EooProperties.Logging.File
+        fileProperties: EooProperties.Logging.AppFile
     ) {
-        log.info("Initializing File loggingProperties")
+        logger.info("Initializing File loggingProperties")
 
         // More documentation is available at: https://github.com/logstash/logstash-logback-encoder
         val fileAppender: RollingFileAppender<ILoggingEvent> = RollingFileAppender()
         fileAppender.context = context
         fileAppender.name = FILE_APPENDER_NAME
-        fileAppender.file = fileProperties.dir + File.pathSeparator + fileProperties.prefix + ".log"
+        fileAppender.file = getLogFileName(fileProperties)
         fileAppender.rollingPolicy = fixedWindowRollingPolicy(context, fileProperties)
+
+        fileAppender.rollingPolicy.setParent(fileAppender)
+        fileAppender.rollingPolicy.start()
         fileAppender.triggeringPolicy = triggeringPolicy(context, fileProperties)
+        fileAppender.triggeringPolicy.start()
 
         val consoleAppender: ConsoleAppender<ILoggingEvent> =
-            context.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME)
-                .getAppender(CONSOLE_APPENDER_NAME) as ConsoleAppender<ILoggingEvent>
+            (context.getLogger(ROOT_LOGGER_NAME).getAppender(CONSOLE_APPENDER_NAME) ?: context.getLogger(
+                ROOT_LOGGER_NAME
+            ).getAppender(DEFAULT_CONSOLE_APPENDER_NAME)) as ConsoleAppender<ILoggingEvent>
         fileAppender.encoder = consoleAppender.encoder
 
         fileAppender.start()
-        context.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME).addAppender(fileAppender)
+        context.getLogger(ROOT_LOGGER_NAME).detachAppender(FILE_APPENDER_NAME)
+        context.getLogger(ROOT_LOGGER_NAME).addAppender(fileAppender)
     }
 
     /**
@@ -110,20 +117,25 @@ object LoggingUtils {
      */
     fun addAccessFileAppender(
         context: LoggerContext,
-        fileProperties: EooProperties.Logging.File
+        fileProperties: EooProperties.Logging.AccessFile
     ) {
-        log.info("Initializing Access File loggingProperties")
+        logger.info("Initializing Access File loggingProperties")
 
         // More documentation is available at: https://github.com/logstash/logstash-logback-encoder
         val accessFileAppender: RollingFileAppender<ILoggingEvent> = RollingFileAppender()
         accessFileAppender.context = context
-        accessFileAppender.encoder = patternLayoutEncoder()
+        accessFileAppender.encoder = patternLayoutEncoder(context)
 
         accessFileAppender.name = ACCESS_FILE_APPENDER_NAME
-        accessFileAppender.file = fileProperties.dir + File.pathSeparator + fileProperties.prefix + ".log"
+        accessFileAppender.file = getLogFileName(fileProperties)
         accessFileAppender.rollingPolicy = timeBasedRollingPolicy(context, fileProperties)
+        accessFileAppender.rollingPolicy.setParent(accessFileAppender)
+        accessFileAppender.rollingPolicy.start()
         accessFileAppender.start()
-        context.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME).addAppender(accessFileAppender)
+        context.getLogger(LOGGER_LOGBOOK).detachAppender(ACCESS_FILE_APPENDER_NAME)
+        context.getLogger(LOGGER_LOGBOOK).addAppender(accessFileAppender)
+        context.getLogger(LOGGER_LOGBOOK).isAdditive = false
+        context.getLogger(LOGGER_LOGBOOK).level = Level.TRACE
     }
 
     /**
@@ -139,7 +151,7 @@ object LoggingUtils {
         customFields: String,
         logstashProperties: EooProperties.Logging.Logstash
     ) {
-        log.info("Initializing Logstash loggingProperties")
+        logger.info("Initializing Logstash loggingProperties")
 
         // More documentation is available at: https://github.com/logstash/logstash-logback-encoder
         val logstashAppender = LogstashTcpSocketAppender()
@@ -149,7 +161,13 @@ object LoggingUtils {
         logstashAppender.name = ASYNC_LOGSTASH_APPENDER_NAME
         logstashAppender.queueSize = logstashProperties.queueSize
         logstashAppender.start()
-        context.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME).addAppender(logstashAppender)
+        context.getLogger(ROOT_LOGGER_NAME).detachAppender(ASYNC_LOGSTASH_APPENDER_NAME)
+        context.getLogger(ROOT_LOGGER_NAME).addAppender(logstashAppender)
+
+        context.getLogger(LOGGER_LOGBOOK).detachAppender(ASYNC_LOGSTASH_APPENDER_NAME)
+        context.getLogger(LOGGER_LOGBOOK).addAppender(logstashAppender)
+        context.getLogger(LOGGER_LOGBOOK).isAdditive = false
+        context.getLogger(LOGGER_LOGBOOK).level = Level.TRACE
     }
 
     /**
@@ -177,7 +195,7 @@ object LoggingUtils {
      * @param useJsonFormat whether to use JSON format
      */
     fun setMetricsMarkerLogbackFilter(context: LoggerContext, useJsonFormat: Boolean) {
-        log.info("Filtering metrics logs from all appenders except the {} appender", LOGSTASH_APPENDER_NAME)
+        logger.info("Filtering metrics logs from all appenders except the {} appender", ASYNC_LOGSTASH_APPENDER_NAME)
         val onMarkerMetricsEvaluator = OnMarkerEvaluator()
         onMarkerMetricsEvaluator.context = context
         onMarkerMetricsEvaluator.addMarker("metrics")
@@ -192,7 +210,7 @@ object LoggingUtils {
                 if (appender.name != ASYNC_LOGSTASH_APPENDER_NAME &&
                     !(appender.name == CONSOLE_APPENDER_NAME && useJsonFormat)
                 ) {
-                    log.debug("Filter metrics logs from the {} appender", appender.name)
+                    this.logger.debug("Filter metrics logs from the {} appender", appender.name)
                     appender.context = context
                     appender.addFilter(metricsFilter)
                     appender.start()
@@ -201,9 +219,17 @@ object LoggingUtils {
         }
     }
 
-    private fun patternLayoutEncoder(): PatternLayoutEncoder {
+    private fun getLogFileName(fileProperties: EooProperties.Logging.File): String {
+        val dir = if (fileProperties.dir.isEmpty())
+            System.getProperty("java.io.tmpdir") + "/.log" else fileProperties.dir
+        return dir + "/" + fileProperties.prefix + ".log"
+    }
+
+    private fun patternLayoutEncoder(context: LoggerContext): PatternLayoutEncoder {
         val encoder = PatternLayoutEncoder()
-        encoder.pattern = "%d{yyyy/MM/dd HH:mm:ss,SSS} [%thread] %-5level %logger{36} - %m%n"
+        encoder.pattern = ACCESS_FILE_PATTERN
+        encoder.context = context
+        encoder.start()
         return encoder
     }
 
@@ -275,7 +301,7 @@ object LoggingUtils {
 
     private fun fixedWindowRollingPolicy(
         context: LoggerContext,
-        fileProperties: EooProperties.Logging.File
+        fileProperties: EooProperties.Logging.AppFile
     ): RollingPolicy {
         val policy = FixedWindowRollingPolicy()
         policy.minIndex = fileProperties.minIndex
@@ -287,7 +313,7 @@ object LoggingUtils {
 
     private fun timeBasedRollingPolicy(
         context: LoggerContext,
-        fileProperties: EooProperties.Logging.File
+        fileProperties: EooProperties.Logging.AccessFile
     ): RollingPolicy {
         val policy: TimeBasedRollingPolicy<ILoggingEvent> = TimeBasedRollingPolicy()
         policy.context = context
@@ -298,7 +324,7 @@ object LoggingUtils {
 
     private fun triggeringPolicy(
         context: LoggerContext,
-        fileProperties: EooProperties.Logging.File
+        fileProperties: EooProperties.Logging.AppFile
     ): TriggeringPolicyBase<ILoggingEvent> {
         val policy: SizeBasedTriggeringPolicy<ILoggingEvent> = SizeBasedTriggeringPolicy()
         policy.context = context
@@ -311,9 +337,9 @@ object LoggingUtils {
      * When configuration file change is detected, the configuration is reset.
      * This listener ensures that the programmatic configuration is also re-applied after reset.
      */
-    private class LogbackLoggerContextListener internal constructor(
-        val loggingProperties: EooProperties.Logging,
-        val customFields: String
+    internal class LogbackLoggerContextListener(
+        private val loggingProperties: EooProperties.Logging,
+        private val customFields: String
     ) : ContextAwareBase(), LoggerContextListener {
 
         override fun isResetResistant(): Boolean {

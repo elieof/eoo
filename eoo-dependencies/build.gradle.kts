@@ -148,5 +148,4 @@ dependencies {
     api(platform(Deps.Spring.cloudBom))
     api(platform(Deps.testcontainersBom))
     api(platform(Deps.infinispanBom))
-
 }

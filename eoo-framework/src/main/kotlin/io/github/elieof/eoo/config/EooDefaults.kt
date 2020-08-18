@@ -1,5 +1,8 @@
 package io.github.elieof.eoo.config
 
+/**
+ * Default values for [EooProperties]
+ */
 interface EooDefaults {
 
     interface Async {
@@ -31,7 +34,7 @@ interface EooDefaults {
         interface File {
             companion object {
                 const val enabled = false
-                const val dir = "./logs"
+                const val dir = ""
                 const val prefix = "application"
                 const val accessPrefix = "access"
                 const val minIndex = 1
@@ -56,7 +59,7 @@ interface EooDefaults {
         interface Logs {
             companion object {
                 const val enabled = false
-                const val reportFrequency: Long = 60
+                const val frequencyReport: Long = 60
             }
         }
 

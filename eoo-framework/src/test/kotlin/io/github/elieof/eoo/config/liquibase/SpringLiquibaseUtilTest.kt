@@ -1,8 +1,6 @@
-package io.github.elieof.eoo.config.liquiabse
+package io.github.elieof.eoo.config.liquibase
 
 import com.zaxxer.hikari.HikariDataSource
-import io.github.elieof.eoo.config.liquibase.LiquibaseContext
-import io.github.elieof.eoo.config.liquibase.SpringLiquibaseUtil
 import liquibase.integration.spring.SpringLiquibase
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.InstanceOfAssertFactories.type
@@ -11,11 +9,13 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties
 import org.springframework.boot.autoconfigure.liquibase.DataSourceClosingSpringLiquibase
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties
 import org.springframework.boot.jdbc.DataSourceBuilder
+import org.springframework.core.task.SimpleAsyncTaskExecutor
+import org.springframework.mock.env.MockEnvironment
 
-private const val URL_LIQUIBASE = "jdbc:h2:mem:liquibase"
-private const val URL_NORMAL = "jdbc:h2:mem:normal"
-private const val USER_NAME = "sa"
-private const val PASSWORD = "password"
+const val URL_LIQUIBASE = "jdbc:h2:mem:liquibase"
+const val URL_NORMAL = "jdbc:h2:mem:normal"
+const val USER_NAME = "sa"
+const val PASSWORD = "password"
 
 class SpringLiquibaseUtilTest {
 
@@ -23,10 +23,14 @@ class SpringLiquibaseUtilTest {
 
     private val normalDataSource = DataSourceBuilder.create().url(URL_NORMAL).username(USER_NAME).build()
 
+    private val env = MockEnvironment()
+
+    private val executor = SimpleAsyncTaskExecutor()
+
     @Test
     fun createSpringLiquibaseFromLiquibaseDataSource() {
         val liquibase: SpringLiquibase = SpringLiquibaseUtil.createSpringLiquibase(
-            LiquibaseContext(liquibaseDataSource, LiquibaseProperties(), null, DataSourceProperties())
+            liquibaseDataSource, LiquibaseProperties(), null, DataSourceProperties()
         )
         Assertions.assertThat(liquibase)
             .isNotInstanceOf(DataSourceClosingSpringLiquibase::class.java)
@@ -41,7 +45,7 @@ class SpringLiquibaseUtilTest {
     @Test
     fun createSpringLiquibaseFromNormalDataSource() {
         val liquibase: SpringLiquibase = SpringLiquibaseUtil.createSpringLiquibase(
-            LiquibaseContext(null, LiquibaseProperties(), normalDataSource, DataSourceProperties())
+            null, LiquibaseProperties(), normalDataSource, DataSourceProperties()
         )
         Assertions.assertThat(liquibase)
             .isNotInstanceOf(DataSourceClosingSpringLiquibase::class.java)
@@ -62,7 +66,7 @@ class SpringLiquibaseUtilTest {
         dataSourceProperties.password = PASSWORD
 
         val liquibase: SpringLiquibase = SpringLiquibaseUtil.createSpringLiquibase(
-            LiquibaseContext(null, liquibaseProperties, null, dataSourceProperties)
+            null, liquibaseProperties, null, dataSourceProperties
         )
         Assertions.assertThat(liquibase)
             .asInstanceOf(type(DataSourceClosingSpringLiquibase::class.java))
@@ -79,7 +83,7 @@ class SpringLiquibaseUtilTest {
         val dataSourceProperties = DataSourceProperties()
 
         val liquibase: SpringLiquibase = SpringLiquibaseUtil.createAsyncSpringLiquibase(
-            LiquibaseContext(liquibaseDataSource, liquibaseProperties, null, dataSourceProperties)
+            liquibaseDataSource, liquibaseProperties, null, dataSourceProperties, env, executor
         )
         Assertions.assertThat(liquibase.dataSource)
             .isEqualTo(liquibaseDataSource)
@@ -95,7 +99,7 @@ class SpringLiquibaseUtilTest {
         val dataSourceProperties = DataSourceProperties()
 
         val liquibase: SpringLiquibase = SpringLiquibaseUtil.createAsyncSpringLiquibase(
-            LiquibaseContext(null, liquibaseProperties, normalDataSource, dataSourceProperties)
+            null, liquibaseProperties, normalDataSource, dataSourceProperties, env, executor
         )
         Assertions.assertThat(liquibase.dataSource)
             .isEqualTo(normalDataSource)
@@ -114,7 +118,7 @@ class SpringLiquibaseUtilTest {
         dataSourceProperties.password = PASSWORD
 
         val liquibase: SpringLiquibase = SpringLiquibaseUtil.createAsyncSpringLiquibase(
-            LiquibaseContext(null, liquibaseProperties, null, dataSourceProperties)
+            null, liquibaseProperties, null, dataSourceProperties, env, executor
         )
         Assertions.assertThat(liquibase)
             .asInstanceOf(type(DataSourceClosingSpringLiquibase::class.java))

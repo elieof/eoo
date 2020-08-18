@@ -7,6 +7,7 @@ plugins {
 
     kotlin("jvm")
     kotlin("plugin.spring")
+    kotlin("kapt") // Required for annotations processing
 
     id("java")
     id("io.spring.dependency-management")
@@ -57,6 +58,15 @@ detekt {
     }
 }
 
+kapt{
+    arguments {
+        arg(
+            "org.springframework.boot.configurationprocessor.additionalMetadataLocations",
+            "$projectDir/src/main/resources"
+        )
+    }
+}
+
 tasks.test {
     useJUnitPlatform()
 
@@ -73,6 +83,9 @@ tasks.jacocoTestReport {
     }
 }
 
+tasks.publishToMavenLocal {
+    dependsOn(tasks.test)
+}
 tasks.check {
     dependsOn(tasks.jacocoTestReport)
 }
@@ -94,20 +107,15 @@ sonarProperties.forEach { (key, value) ->
     }
 }
 
-tasks.dokka {
-    outputFormat = "html"
-    outputDirectory = "$buildDir/javadoc"
-    configuration {
-        includeNonPublic = true
-        jdkVersion = 8
-    }
+tasks.dokkaJavadoc {
+    outputDirectory = "$buildDir/dokka"
 }
 
 val dokkaJar by tasks.creating(Jar::class) {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
     description = "Assembles Kotlin docs with Dokka"
     archiveClassifier.set("javadoc")
-    from(tasks.dokka)
+    from(tasks.dokkaJavadoc)
 }
 
 val sourcesJar by tasks.creating(Jar::class) {
@@ -196,12 +204,20 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
 
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+    kapt("org.springframework.boot:spring-boot-configuration-processor")
+    kapt(Deps.hibernateJpaModelGen)
+    kapt(Deps.jaxbApi)
+    kapt(Deps.jaxbImpl)
+
     implementation("org.springframework.boot:spring-boot-autoconfigure")
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-web")
-
     implementation("org.springframework:spring-context-support")
+
+    implementation("com.fasterxml.jackson.core:jackson-core:2.11.1")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.11.1")
+    implementation("com.fasterxml.jackson.core:jackson-annotations:2.11.1")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.1")
 
     testImplementation("com.h2database:h2")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
@@ -210,7 +226,11 @@ dependencies {
     testImplementation("org.springframework.security:spring-security-test")
 
     "loggingImplementation"("org.springframework.boot:spring-boot-starter-logging")
+    "loggingImplementation"("com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.11.1")
     "loggingImplementation"(Deps.Logging.logstash)
+    "loggingImplementation"(Deps.Logging.LogBook.spring)
+    "loggingImplementation"(Deps.Logging.LogBook.logstash)
+//    "loggingImplementation"(Deps.Logging.LogBook.json)
 
     "liquibaseImplementation"("org.liquibase:liquibase-core")
 

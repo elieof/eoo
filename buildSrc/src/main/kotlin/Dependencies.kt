@@ -1,16 +1,15 @@
 @file:Suppress("MemberVisibilityCanBePrivate")
 
-const val kotlinVersion = "1.3.72"
-const val checkstyleVersion = "1.3.72"
+const val kotlinVersion = "1.4.0"
 
 const val springBootVersion = "2.2.8.RELEASE"
 const val springDependenciesManagementVersion = "1.0.9.RELEASE"
 
-const val klintVersion = "9.2.1"
-const val detektVersion = "1.10.0"
-const val sonarqubeVersion = "2.8"
+const val klintVersion = "9.3.0"
+const val detektVersion = "1.11.1"
+const val sonarqubeVersion = "3.0"
 const val nohttpVersion = "0.0.5.RELEASE"
-const val dokkaVersion = "0.10.1"
+const val dokkaVersion = "1.4.0-rc"
 
 const val dropwizardMetricsVersion = "4.1.9"
 const val hazelcastHibernate53Version = "1.3.2"
@@ -20,6 +19,7 @@ const val jaxbApiVersion = "2.3.1"
 const val jaxbImplVersion = "2.3.3"
 const val jjwtVersion = "0.11.1"
 const val logstashLogbackEncoderVersion = "6.3"
+const val logbookVersion = "2.1.4"
 const val mapstructVersion = "1.3.1.Final"
 const val micrometerVersion = "1.4.2"
 const val mongobeeVersion = "0.13"
@@ -46,6 +46,8 @@ object Deps {
     const val hazelcastHibernate53 = "com.hazelcast:hazelcast-hibernate53:$hazelcastHibernate53Version"
     const val hibernateJpaModelGen = "org.hibernate:hibernate-jpamodelgen:$hibernateVersion"
     const val infinispanBom = "org.infinispan:infinispan-bom:$infinispanVersion"
+    const val jaxbApi = "javax.xml.bind:jaxb-api:$jaxbApiVersion"
+    const val jaxbImpl = "com.sun.xml.bind:jaxb-impl:$jaxbImplVersion"
     const val jjwtApi = "io.jsonwebtoken:jjwt-api:$jjwtVersion"
     const val jjwtImpl = "io.jsonwebtoken:jjwt-impl:$jjwtVersion"
     const val jjwtJackson = "io.jsonwebtoken:jjwt-jackson:$jjwtVersion"
@@ -65,6 +67,15 @@ object Deps {
 
     object Logging {
         const val logstash = "net.logstash.logback:logstash-logback-encoder:$logstashLogbackEncoderVersion"
+
+        object LogBook {
+            private const val prefix = "org.zalando"
+
+            const val core = "$prefix:logbook-core:$logbookVersion"
+            const val spring = "$prefix:logbook-spring-boot-starter:$logbookVersion"
+            const val logstash = "$prefix:logbook-logstash:$logbookVersion"
+            const val json = "$prefix:logbook-json:$logbookVersion"
+        }
     }
 
     object Spring {
