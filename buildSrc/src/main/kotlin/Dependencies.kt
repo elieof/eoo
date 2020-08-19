@@ -9,7 +9,7 @@ const val klintVersion = "9.3.0"
 const val detektVersion = "1.11.1"
 const val sonarqubeVersion = "3.0"
 const val nohttpVersion = "0.0.5.RELEASE"
-const val dokkaVersion = "1.4.0-rc"
+const val dokkaVersion = "0.10.1"
 
 const val dropwizardMetricsVersion = "4.1.9"
 const val hazelcastHibernate53Version = "1.3.2"

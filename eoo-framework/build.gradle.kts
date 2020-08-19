@@ -107,15 +107,20 @@ sonarProperties.forEach { (key, value) ->
     }
 }
 
-tasks.dokkaJavadoc {
-    outputDirectory = "$buildDir/dokka"
+tasks.dokka {
+    outputFormat = "html"
+    outputDirectory = "$buildDir/javadoc"
+    configuration {
+        includeNonPublic = true
+        jdkVersion = 8
+    }
 }
 
 val dokkaJar by tasks.creating(Jar::class) {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
     description = "Assembles Kotlin docs with Dokka"
     archiveClassifier.set("javadoc")
-    from(tasks.dokkaJavadoc)
+    from(tasks.dokka)
 }
 
 val sourcesJar by tasks.creating(Jar::class) {
