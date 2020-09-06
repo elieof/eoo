@@ -2,7 +2,6 @@ package io.github.elieof.eoo.config.liquibase
 
 import com.zaxxer.hikari.HikariDataSource
 import io.github.elieof.eoo.test.LogbackRecorder
-import javax.sql.DataSource
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.InstanceOfAssertFactories
 import org.junit.jupiter.api.AfterEach
@@ -18,6 +17,7 @@ import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties
 import org.springframework.core.env.ConfigurableEnvironment
 import org.springframework.core.task.SimpleAsyncTaskExecutor
 import org.springframework.mock.env.MockEnvironment
+import javax.sql.DataSource
 
 internal class EooLiquibaseAutoConfigurationTest {
 

@@ -10,7 +10,7 @@ plugins {
     kotlin("kapt") // Required for annotations processing
 
     id("java")
-    id("io.spring.dependency-management")
+//    id("io.spring.dependency-management")
 
     id("org.springframework.boot")
     id("org.sonarqube")
@@ -58,7 +58,7 @@ detekt {
     }
 }
 
-kapt{
+kapt {
     arguments {
         arg(
             "org.springframework.boot.configurationprocessor.additionalMetadataLocations",
@@ -107,20 +107,15 @@ sonarProperties.forEach { (key, value) ->
     }
 }
 
-tasks.dokka {
-    outputFormat = "html"
-    outputDirectory = "$buildDir/javadoc"
-    configuration {
-        includeNonPublic = true
-        jdkVersion = 8
-    }
+tasks.dokkaJavadoc {
+    outputDirectory.set(buildDir.resolve("$buildDir/dokka"))
 }
 
 val dokkaJar by tasks.creating(Jar::class) {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
     description = "Assembles Kotlin docs with Dokka"
     archiveClassifier.set("javadoc")
-    from(tasks.dokka)
+    from(tasks.dokkaJavadoc)
 }
 
 val sourcesJar by tasks.creating(Jar::class) {
@@ -188,9 +183,6 @@ java {
     registerFeature("logging") {
         usingSourceSet(sources)
     }
-    registerFeature("liquibase") {
-        usingSourceSet(sources)
-    }
     registerFeature("jpa") {
         usingSourceSet(sources)
     }
@@ -206,23 +198,28 @@ java {
 }
 
 dependencies {
+    implementation(platform(project(":eoo-dependencies")))
+//    implementation(platform(Eoo.Deps.Spring.Boot.dependencies))
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
 
-    kapt("org.springframework.boot:spring-boot-configuration-processor")
-    kapt(Deps.hibernateJpaModelGen)
-    kapt(Deps.jaxbApi)
-    kapt(Deps.jaxbImpl)
+    kapt(Eoo.Deps.Spring.Boot.configurationProcessor)
+//    kapt("org.springframework.boot:spring-boot-configuration-processor")
+    kapt(Eoo.Deps.hibernateJpaModelGen)
+    kapt(Eoo.Deps.jaxbApi)
+    kapt(Eoo.Deps.jaxbImpl)
 
     implementation("org.springframework.boot:spring-boot-autoconfigure")
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework:spring-context-support")
+    implementation("io.springfox:springfox-oas")
+    implementation("io.springfox:springfox-swagger2")
+    implementation("io.springfox:springfox-bean-validators")
 
-    implementation("com.fasterxml.jackson.core:jackson-core:2.11.1")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.11.1")
-    implementation("com.fasterxml.jackson.core:jackson-annotations:2.11.1")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.1")
+//    implementation("com.fasterxml.jackson.core:jackson-databind:2.11.1")
+//    implementation("com.fasterxml.jackson.core:jackson-annotations:2.11.1")
+//    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.1")
 
     testImplementation("com.h2database:h2")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
@@ -232,29 +229,39 @@ dependencies {
 
     "loggingImplementation"("org.springframework.boot:spring-boot-starter-logging")
     "loggingImplementation"("com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.11.1")
-    "loggingImplementation"(Deps.Logging.logstash)
-    "loggingImplementation"(Deps.Logging.LogBook.spring)
-    "loggingImplementation"(Deps.Logging.LogBook.logstash)
-//    "loggingImplementation"(Deps.Logging.LogBook.json)
-
-    "liquibaseImplementation"("org.liquibase:liquibase-core")
+    "loggingImplementation"(Eoo.Deps.Logging.logstash)
+    "loggingImplementation"(Eoo.Deps.Logging.LogBook.spring)
+    "loggingImplementation"(Eoo.Deps.Logging.LogBook.logstash)
+//    "loggingImplementation"(Eoo.Deps.Logging.LogBook.json)
 
     "mailImplementation"("org.springframework.boot:spring-boot-starter-mail")
 
+    "jpaImplementation"("org.liquibase:liquibase-core")
     "jpaImplementation"("com.fasterxml.jackson.datatype:jackson-datatype-hibernate5")
     "jpaImplementation"("org.springframework.boot:spring-boot-starter-data-jpa")
     "jpaImplementation"("javax.cache:cache-api")
     "jpaImplementation"("org.hibernate:hibernate-jcache")
 
-    "cloudImplementation"(Deps.Spring.cloudNetflix) {
+    "cloudImplementation"(Eoo.Deps.Spring.cloudNetflix) {
         exclude("org.hdrhistogram", "HdrHistogram")
     }
-    "cloudImplementation"("org.springframework.boot:spring-boot-starter-cloud-connectors")
     "cloudImplementation"("org.springframework.boot:spring-boot-actuator-autoconfigure")
     "cloudImplementation"("org.springframework.boot:spring-boot-actuator")
-    "cloudImplementation"(Deps.metricsCore)
+    "cloudImplementation"("io.dropwizard.metrics:metrics-core")
+    "cloudImplementation"("io.micrometer:micrometer-core")
 
     "securityImplementation"("org.springframework.boot:spring-boot-starter-security")
     "securityImplementation"("org.springframework.security:spring-security-data")
-    "securityImplementation"(Deps.Spring.Security.oauth2)
+    "securityImplementation"(Eoo.Deps.Spring.Security.oauth2)
+}
+
+configurations.all {
+    resolutionStrategy {
+        eachDependency {
+            // Force Kotlin to our version
+            if (requested.group == "org.jetbrains.kotlin") {
+                useVersion(Eoo.kotlinVersion)
+            }
+        }
+    }
 }

@@ -5,10 +5,10 @@ import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.LoggerContext
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.AppenderBase
-import java.util.WeakHashMap
 import org.slf4j.LoggerFactory
 import org.slf4j.Marker
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
+import java.util.WeakHashMap
 
 @ConditionalOnClass(LoggerContext::class)
 class LogbackRecorder(

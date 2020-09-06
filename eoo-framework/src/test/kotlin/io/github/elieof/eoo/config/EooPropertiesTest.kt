@@ -172,6 +172,454 @@ internal class EooPropertiesTest {
         assertThat(obj.frequencyReport).isEqualTo(value)
     }
 
+    @Test
+    fun testCacheHazelcastTimeToLiveSeconds() {
+        val obj = properties.cache.hazelcast
+        val value = EooDefaults.Cache.Hazelcast.timeToLiveSeconds
+        assertThat(obj.timeToLiveSeconds).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheHazelcastBackupCount() {
+        val obj = properties.cache.hazelcast
+        val value = EooDefaults.Cache.Hazelcast.backupCount
+        assertThat(obj.backupCount).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheCaffeineTimeToLiveSeconds() {
+        val obj = properties.cache.caffeine
+        val value = EooDefaults.Cache.Caffeine.timeToLiveSeconds
+        assertThat(obj.timeToLiveSeconds).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheCaffeineMaxEntries() {
+        val obj = properties.cache.caffeine
+        val value = EooDefaults.Cache.Caffeine.maxEntries
+        assertThat(obj.maxEntries).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheEhcacheTimeToLiveSeconds() {
+        val obj = properties.cache.ehcache
+        val value = EooDefaults.Cache.Ehcache.timeToLiveSeconds
+        assertThat(obj.timeToLiveSeconds).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheEhcacheMaxEntries() {
+        val obj = properties.cache.ehcache
+        val value = EooDefaults.Cache.Ehcache.maxEntries
+        assertThat(obj.maxEntries).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheInfinispanConfigFile() {
+        val obj = properties.cache.infinispan
+        val value = EooDefaults.Cache.Infinispan.configFile
+        assertThat(obj.configFile).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheInfinispanStatsEnabled() {
+        val obj = properties.cache.infinispan
+        val value = EooDefaults.Cache.Infinispan.statsEnabled
+        assertThat(obj.statsEnabled).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheInfinispanLocalTimeToLiveSeconds() {
+        val obj = properties.cache.infinispan.local
+        val value = EooDefaults.Cache.Infinispan.Local.timeToLiveSeconds
+        assertThat(obj.timeToLiveSeconds).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheInfinispanLocalMaxEntries() {
+        val obj = properties.cache.infinispan.local
+        val value = EooDefaults.Cache.Infinispan.Local.maxEntries
+        assertThat(obj.maxEntries).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheInfinispanDistributedTimeToLiveSeconds() {
+        val obj = properties.cache.infinispan.distributed
+        val value = EooDefaults.Cache.Infinispan.Distributed.timeToLiveSeconds
+        assertThat(obj.timeToLiveSeconds).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheInfinispanDistributedMaxEntries() {
+        val obj = properties.cache.infinispan.distributed
+        val value = EooDefaults.Cache.Infinispan.Distributed.maxEntries
+        assertThat(obj.maxEntries).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheInfinispanDistributedInstanceCount() {
+        val obj = properties.cache.infinispan.distributed
+        val value = EooDefaults.Cache.Infinispan.Distributed.instanceCount
+        assertThat(obj.instanceCount).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheInfinispanReplicatedTimeToLiveSeconds() {
+        val obj = properties.cache.infinispan.replicated
+        val value = EooDefaults.Cache.Infinispan.Replicated.timeToLiveSeconds
+        assertThat(obj.timeToLiveSeconds).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheInfinispanReplicatedMaxEntries() {
+        val obj = properties.cache.infinispan.replicated
+        val value = EooDefaults.Cache.Infinispan.Replicated.maxEntries
+        assertThat(obj.maxEntries).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheMemCachedEnabled() {
+        val obj = properties.cache.memCached
+        val value = EooDefaults.Cache.Memcached.enabled
+        assertThat(obj.enabled).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheMemCachedServers() {
+        val obj = properties.cache.memCached
+        val value = EooDefaults.Cache.Memcached.servers
+        assertThat(obj.servers).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheMemCachedExpiration() {
+        val obj = properties.cache.memCached
+        val value = EooDefaults.Cache.Memcached.expiration
+        assertThat(obj.expiration).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheMemCachedUseBinaryProtocol() {
+        val obj = properties.cache.memCached
+        val value = EooDefaults.Cache.Memcached.useBinaryProtocol
+        assertThat(obj.useBinaryProtocol).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheMemCachedAuthenticationEnabled() {
+        val obj = properties.cache.memCached.authentication
+        val value = EooDefaults.Cache.Memcached.Authentication.enabled
+        assertThat(obj.enabled).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheMemCachedAuthenticationUsername() {
+        val obj = properties.cache.memCached.authentication
+        val value = EooDefaults.Cache.Memcached.Authentication.username
+        assertThat(obj.username).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheMemCachedAuthenticationPassword() {
+        val obj = properties.cache.memCached.authentication
+        val value = EooDefaults.Cache.Memcached.Authentication.password
+        assertThat(obj.password).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheRedisServer() {
+        val obj = properties.cache.redis
+        val value = EooDefaults.Cache.Redis.server
+        assertThat(obj.server).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheRedisExpiration() {
+        val obj = properties.cache.redis
+        val value = EooDefaults.Cache.Redis.expiration
+        assertThat(obj.expiration).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheRedisCluster() {
+        val obj = properties.cache.redis
+        val value = EooDefaults.Cache.Redis.cluster
+        assertThat(obj.cluster).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheRedisConnectionPoolSize() {
+        val obj = properties.cache.redis
+        val value = EooDefaults.Cache.Redis.connectionPoolSize
+        assertThat(obj.connectionPoolSize).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheRedisConnectionMinimumIdleSize() {
+        val obj = properties.cache.redis
+        val value = EooDefaults.Cache.Redis.connectionMinimumIdleSize
+        assertThat(obj.connectionMinimumIdleSize).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheRedisSubscriptionConnectionPoolSize() {
+        val obj = properties.cache.redis
+        val value = EooDefaults.Cache.Redis.subscriptionConnectionPoolSize
+        assertThat(obj.subscriptionConnectionPoolSize).isEqualTo(value)
+    }
+
+    @Test
+    fun testCacheRedisSubscriptionConnectionMinimumIdleSize() {
+        val obj = properties.cache.redis
+        val value = EooDefaults.Cache.Redis.subscriptionConnectionMinimumIdleSize
+        assertThat(obj.subscriptionConnectionMinimumIdleSize).isEqualTo(value)
+    }
+
+    @Test
+    fun testMailEnabled() {
+        val obj = properties.mail
+        val value = EooDefaults.Mail.enabled
+        assertThat(obj.enabled).isEqualTo(value)
+    }
+
+    @Test
+    fun testMailFrom() {
+        val obj = properties.mail
+        val value = EooDefaults.Mail.from
+        assertThat(obj.from).isEqualTo(value)
+    }
+
+    @Test
+    fun testMailBaseUrl() {
+        val obj = properties.mail
+        val value = EooDefaults.Mail.baseUrl
+        assertThat(obj.baseUrl).isEqualTo(value)
+    }
+
+    @Test
+    fun testSecurityClientAuthorizationAccessTokenUri() {
+        val obj = properties.security.clientAuthorization
+        val value = EooDefaults.Security.ClientAuthorization.accessTokenUri
+        assertThat(obj.accessTokenUri).isEqualTo(value)
+    }
+
+    @Test
+    fun testSecurityClientAuthorizationTokenServiceId() {
+        val obj = properties.security.clientAuthorization
+        val value = EooDefaults.Security.ClientAuthorization.tokenServiceId
+        assertThat(obj.tokenServiceId).isEqualTo(value)
+    }
+
+    @Test
+    fun testSecurityClientAuthorizationClientId() {
+        val obj = properties.security.clientAuthorization
+        val value = EooDefaults.Security.ClientAuthorization.clientId
+        assertThat(obj.clientId).isEqualTo(value)
+    }
+
+    @Test
+    fun testSecurityClientAuthorizationClientSecret() {
+        val obj = properties.security.clientAuthorization
+        val value = EooDefaults.Security.ClientAuthorization.clientSecret
+        assertThat(obj.clientSecret).isEqualTo(value)
+    }
+
+    @Test
+    fun testSecurityAuthenticationJwtSecret() {
+        val obj = properties.security.authentication.jwt
+        val value = EooDefaults.Security.Authentication.Jwt.secret
+        assertThat(obj.secret).isEqualTo(value)
+    }
+
+    @Test
+    fun testSecurityAuthenticationJwtBase64Secret() {
+        val obj = properties.security.authentication.jwt
+        val value = EooDefaults.Security.Authentication.Jwt.base64Secret
+        assertThat(obj.base64Secret).isEqualTo(value)
+    }
+
+    @Test
+    fun testSecurityAuthenticationJwtTokenValidityInSeconds() {
+        val obj = properties.security.authentication.jwt
+        val value = EooDefaults.Security.Authentication.Jwt.tokenValidityInSeconds
+        assertThat(obj.tokenValidityInSeconds).isEqualTo(value)
+    }
+
+    @Test
+    fun testSecurityAuthenticationJwtTokenValidityInSecondsForRememberMe() {
+        val obj = properties.security.authentication.jwt
+        val value = EooDefaults.Security.Authentication.Jwt.tokenValidityInSecondsForRememberMe
+        assertThat(obj.tokenValidityInSecondsForRememberMe).isEqualTo(value)
+    }
+
+    @Test
+    fun testSecurityRememberMeKey() {
+        val obj = properties.security.rememberMe
+        val value = EooDefaults.Security.RememberMe.key
+        assertThat(obj.key).isEqualTo(value)
+    }
+
+    @Test
+    fun testSecurityOauth2() {
+        val obj = properties.security.oauth2
+        val value = EooDefaults.Security.Oauth2.audience
+        assertThat(obj.audience).isEqualTo(value)
+    }
+
+    @Test
+    fun testApiDocsTitle() {
+        val obj = properties.apiDocs
+        val value = EooDefaults.ApiDocs.title
+        assertThat(obj.title).isEqualTo(value)
+    }
+
+    @Test
+    fun testApiDocsDescription() {
+        val obj = properties.apiDocs
+        val value = EooDefaults.ApiDocs.description
+        assertThat(obj.description).isEqualTo(value)
+    }
+
+    @Test
+    fun testApiDocsVersion() {
+        val obj = properties.apiDocs
+        val value = EooDefaults.ApiDocs.version
+        assertThat(obj.version).isEqualTo(value)
+    }
+
+    @Test
+    fun testApiDocsTermsOfServiceUrl() {
+        val obj = properties.apiDocs
+        val value = EooDefaults.ApiDocs.termsOfServiceUrl
+        assertThat(obj.termsOfServiceUrl).isEqualTo(value)
+    }
+
+    @Test
+    fun testApiDocsContactName() {
+        val obj = properties.apiDocs
+        val value = EooDefaults.ApiDocs.contactName
+        assertThat(obj.contactName).isEqualTo(value)
+    }
+
+    @Test
+    fun testApiDocsContactUrl() {
+        val obj = properties.apiDocs
+        val value = EooDefaults.ApiDocs.contactUrl
+        assertThat(obj.contactUrl).isEqualTo(value)
+    }
+
+    @Test
+    fun testApiDocsContactEmail() {
+        val obj = properties.apiDocs
+        val value = EooDefaults.ApiDocs.contactEmail
+        assertThat(obj.contactEmail).isEqualTo(value)
+    }
+
+    @Test
+    fun testApiDocsLicense() {
+        val obj = properties.apiDocs
+        val value = EooDefaults.ApiDocs.license
+        assertThat(obj.license).isEqualTo(value)
+    }
+
+    @Test
+    fun testApiDocsLicenseUrl() {
+        val obj = properties.apiDocs
+        val value = EooDefaults.ApiDocs.licenseUrl
+        assertThat(obj.licenseUrl).isEqualTo(value)
+    }
+
+    @Test
+    fun testApiDocsDefaultIncludePattern() {
+        val obj = properties.apiDocs
+        val value = EooDefaults.ApiDocs.defaultIncludePattern
+        assertThat(obj.defaultIncludePattern).isEqualTo(value)
+    }
+
+    @Test
+    fun testApiDocsHost() {
+        val obj = properties.apiDocs
+        val value = EooDefaults.ApiDocs.host
+        assertThat(obj.host).isEqualTo(value)
+    }
+
+    @Test
+    fun testApiDocsProtocols() {
+        val obj = properties.apiDocs
+        val value = EooDefaults.ApiDocs.protocols
+        assertThat(obj.protocols).isEqualTo(value)
+    }
+
+    @Test
+    fun testApiDocsServers() {
+        val obj = properties.apiDocs
+        val value = EooDefaults.ApiDocs.servers
+        assertThat(obj.servers).isEqualTo(value)
+    }
+
+    @Test
+    fun testApiDocsUseDefaultResponseMessages() {
+        val obj = properties.apiDocs
+        val value = EooDefaults.ApiDocs.useDefaultResponseMessages
+        assertThat(obj.useDefaultResponseMessages).isEqualTo(value)
+    }
+
+    @Test
+    fun testSocialRedirectAfterSignIng() {
+        val obj = properties.social
+        val value = EooDefaults.Social.redirectAfterSignIn
+        assertThat(obj.redirectAfterSignIn).isEqualTo(value)
+    }
+
+    @Test
+    fun testGatewayRateLimitingEnabled() {
+        val obj = properties.gateway.rateLimiting
+        val value = EooDefaults.Gateway.RateLimiting.enabled
+        assertThat(obj.enabled).isEqualTo(value)
+    }
+
+    @Test
+    fun testGatewayRateLimitingLimit() {
+        val obj = properties.gateway.rateLimiting
+        val value = EooDefaults.Gateway.RateLimiting.limit
+        assertThat(obj.limit).isEqualTo(value)
+    }
+
+    @Test
+    fun testGatewayRateLimitingDurationInSeconds() {
+        val obj = properties.gateway.rateLimiting
+        val value = EooDefaults.Gateway.RateLimiting.durationInSeconds
+        assertThat(obj.durationInSeconds).isEqualTo(value)
+    }
+
+    @Test
+    fun testGatewayAuthorizedMicroservicesEndpoints() {
+        val obj = properties.gateway
+        val value = EooDefaults.Gateway.authorizedMicroservicesEndpoints
+        assertThat(obj.authorizedMicroservicesEndpoints).isEqualTo(value)
+    }
+
+    @Test
+    fun testRegistryPassword() {
+        val obj = properties.registry
+        val value = EooDefaults.Registry.password
+        assertThat(obj.password).isEqualTo(value)
+    }
+
+    @Test
+    fun testClientAppName() {
+        val obj = properties.clientApp
+        val value = EooDefaults.ClientApp.name
+        assertThat(obj.name).isEqualTo(value)
+    }
+
+    @Test
+    fun testAuditEventsRetentionPeriod() {
+        val obj = properties.auditEvents
+        val value = EooDefaults.AuditEvents.retentionPeriod
+        assertThat(obj.retentionPeriod).isEqualTo(value)
+    }
+
     @Throws(java.lang.Exception::class)
     private fun reflect(obj: Any, dst: MutableSet<String>, prefix: String) {
         val src: Class<*> = obj.javaClass

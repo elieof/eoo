@@ -30,7 +30,10 @@ class SpringLiquibaseUtilTest {
     @Test
     fun createSpringLiquibaseFromLiquibaseDataSource() {
         val liquibase: SpringLiquibase = SpringLiquibaseUtil.createSpringLiquibase(
-            liquibaseDataSource, LiquibaseProperties(), null, DataSourceProperties()
+            liquibaseDataSource,
+            LiquibaseProperties(),
+            null,
+            DataSourceProperties()
         )
         Assertions.assertThat(liquibase)
             .isNotInstanceOf(DataSourceClosingSpringLiquibase::class.java)
@@ -45,7 +48,10 @@ class SpringLiquibaseUtilTest {
     @Test
     fun createSpringLiquibaseFromNormalDataSource() {
         val liquibase: SpringLiquibase = SpringLiquibaseUtil.createSpringLiquibase(
-            null, LiquibaseProperties(), normalDataSource, DataSourceProperties()
+            null,
+            LiquibaseProperties(),
+            normalDataSource,
+            DataSourceProperties()
         )
         Assertions.assertThat(liquibase)
             .isNotInstanceOf(DataSourceClosingSpringLiquibase::class.java)
@@ -66,7 +72,10 @@ class SpringLiquibaseUtilTest {
         dataSourceProperties.password = PASSWORD
 
         val liquibase: SpringLiquibase = SpringLiquibaseUtil.createSpringLiquibase(
-            null, liquibaseProperties, null, dataSourceProperties
+            null,
+            liquibaseProperties,
+            null,
+            dataSourceProperties
         )
         Assertions.assertThat(liquibase)
             .asInstanceOf(type(DataSourceClosingSpringLiquibase::class.java))
@@ -83,7 +92,12 @@ class SpringLiquibaseUtilTest {
         val dataSourceProperties = DataSourceProperties()
 
         val liquibase: SpringLiquibase = SpringLiquibaseUtil.createAsyncSpringLiquibase(
-            liquibaseDataSource, liquibaseProperties, null, dataSourceProperties, env, executor
+            liquibaseDataSource,
+            liquibaseProperties,
+            null,
+            dataSourceProperties,
+            env,
+            executor
         )
         Assertions.assertThat(liquibase.dataSource)
             .isEqualTo(liquibaseDataSource)
@@ -99,7 +113,12 @@ class SpringLiquibaseUtilTest {
         val dataSourceProperties = DataSourceProperties()
 
         val liquibase: SpringLiquibase = SpringLiquibaseUtil.createAsyncSpringLiquibase(
-            null, liquibaseProperties, normalDataSource, dataSourceProperties, env, executor
+            null,
+            liquibaseProperties,
+            normalDataSource,
+            dataSourceProperties,
+            env,
+            executor
         )
         Assertions.assertThat(liquibase.dataSource)
             .isEqualTo(normalDataSource)
@@ -118,7 +137,12 @@ class SpringLiquibaseUtilTest {
         dataSourceProperties.password = PASSWORD
 
         val liquibase: SpringLiquibase = SpringLiquibaseUtil.createAsyncSpringLiquibase(
-            null, liquibaseProperties, null, dataSourceProperties, env, executor
+            null,
+            liquibaseProperties,
+            null,
+            dataSourceProperties,
+            env,
+            executor
         )
         Assertions.assertThat(liquibase)
             .asInstanceOf(type(DataSourceClosingSpringLiquibase::class.java))

@@ -1,16 +1,16 @@
 package io.github.elieof.eoo.config.liquibase
 
-import io.github.elieof.eoo.config.EooProfiles.Companion.SPRING_PROFILE_DEVELOPMENT
-import io.github.elieof.eoo.config.EooProfiles.Companion.SPRING_PROFILE_HEROKU
-import io.github.elieof.eoo.config.EooProfiles.Companion.SPRING_PROFILE_NO_LIQUIBASE
-import java.sql.SQLException
-import java.util.concurrent.Executor
+import io.github.elieof.eoo.config.EooProfiles.SPRING_PROFILE_DEVELOPMENT
+import io.github.elieof.eoo.config.EooProfiles.SPRING_PROFILE_HEROKU
+import io.github.elieof.eoo.config.EooProfiles.SPRING_PROFILE_NO_LIQUIBASE
 import liquibase.exception.LiquibaseException
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.liquibase.DataSourceClosingSpringLiquibase
 import org.springframework.core.env.Environment
 import org.springframework.core.env.Profiles
 import org.springframework.util.StopWatch
+import java.sql.SQLException
+import java.util.concurrent.Executor
 
 /**
  * Start Liquibase asynchronously When using profile [SPRING_PROFILE_DEVELOPMENT]
@@ -50,16 +50,16 @@ open class AsyncSpringLiquibase(
     }
 
     override fun afterPropertiesSet() {
-            if (!env.acceptsProfiles(Profiles.of(SPRING_PROFILE_NO_LIQUIBASE))) {
-                if (env.acceptsProfiles(Profiles.of("$SPRING_PROFILE_DEVELOPMENT|$SPRING_PROFILE_HEROKU"))) {
-                    connect()
-                } else {
-                    logger.debug(STARTING_SYNC_MESSAGE)
-                    initDb()
-                }
+        if (!env.acceptsProfiles(Profiles.of(SPRING_PROFILE_NO_LIQUIBASE))) {
+            if (env.acceptsProfiles(Profiles.of("$SPRING_PROFILE_DEVELOPMENT|$SPRING_PROFILE_HEROKU"))) {
+                connect()
             } else {
-                logger.debug(DISABLED_MESSAGE)
+                logger.debug(STARTING_SYNC_MESSAGE)
+                initDb()
             }
+        } else {
+            logger.debug(DISABLED_MESSAGE)
+        }
     }
 
     private fun connect() {

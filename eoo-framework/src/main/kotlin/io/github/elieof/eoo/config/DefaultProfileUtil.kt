@@ -4,8 +4,9 @@ import org.springframework.boot.SpringApplication
 
 /**
  * Utility class to load a Spring profile to be used as default
- * when there is no {@code spring.profiles.active} set in the environment or as command line argument.
- * If the value is not available in {@code application.yml} then {@code dev} profile will be used as default.
+ * when there is no `spring.profiles.active` set in the environment or as command line argument.
+ *
+ * If the value is not available in `application.yml` then `dev`  profile will be used as default.
  */
 object DefaultProfileUtil {
     private const val SPRING_PROFILE_DEFAULT = "spring.profiles.default"
@@ -20,7 +21,7 @@ object DefaultProfileUtil {
         /*
          * The default profile to use when no other profiles are defined
          * This cannot be set in the application.yml file.
-         * See https://github.com/spring-projects/spring-boot/issues/1219
+         * See[issue](https://github.com/spring-projects/spring-boot/issues/1219)
          */
         defProperties[SPRING_PROFILE_DEFAULT] = EooProfiles.SPRING_PROFILE_DEVELOPMENT
         app.setDefaultProperties(defProperties)

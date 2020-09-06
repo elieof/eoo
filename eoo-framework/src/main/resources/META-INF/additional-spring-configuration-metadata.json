@@ -1,68 +1,326 @@
 {
-    "properties": [
-        {
-            "name": "eoo.async.core-pool-size",
-            "defaultValue": 2
-        },
-        {
-            "name": "eoo.async.max-pool-size",
-            "defaultValue": 50
-        },
-        {
-            "name": "eoo.async.queue-capacity",
-            "defaultValue": 10000
-        },
-        {
-            "name": "eoo.http.cache.time-to-live-in-days",
-            "defaultValue": 1461
-        },
-        {
-            "name": "eoo.logging.access-file.dir",
-            "defaultValue": "java.io.tmpdir"
-        },
-        {
-            "name": "eoo.logging.access-file.max-history",
-            "defaultValue": 1
-        },
-        {
-            "name": "eoo.logging.access-file.prefix",
-            "defaultValue": "access"
-        },
-        {
-            "name": "eoo.logging.file.dir",
-            "defaultValue": "java.io.tmpdir"
-        },
-        {
-            "name": "eoo.logging.file.max-index",
-            "defaultValue": 10
-        },
-        {
-            "name": "eoo.logging.file.max-size",
-            "defaultValue": "10 MB"
-        },
-        {
-            "name": "eoo.logging.file.min-index",
-            "defaultValue": 1
-        },
-        {
-            "name": "eoo.logging.file.prefix",
-            "defaultValue": "application"
-        },
-        {
-            "name": "eoo.logging.logstash.host",
-            "defaultValue": "localhost"
-        },
-        {
-            "name": "eoo.logging.logstash.port",
-            "defaultValue": 5000
-        },
-        {
-            "name": "eoo.logging.logstash.queue-size",
-            "defaultValue": 512
-        },
-        {
-            "name": "eoo.metrics.logs.frequency-report",
-            "defaultValue": 60
-        }
-    ]
+  "properties": [
+    {
+      "name": "eoo.async.core-pool-size",
+      "defaultValue": 2
+    },
+    {
+      "name": "eoo.async.max-pool-size",
+      "defaultValue": 50
+    },
+    {
+      "name": "eoo.async.queue-capacity",
+      "defaultValue": 10000
+    },
+    {
+      "name": "eoo.http.cache.time-to-live-in-days",
+      "defaultValue": 1461
+    },
+    {
+      "name": "eoo.logging.access-file.dir",
+      "defaultValue": "java.io.tmpdir"
+    },
+    {
+      "name": "eoo.logging.access-file.max-history",
+      "defaultValue": 1
+    },
+    {
+      "name": "eoo.logging.access-file.prefix",
+      "defaultValue": "access"
+    },
+    {
+      "name": "eoo.logging.file.dir",
+      "defaultValue": "java.io.tmpdir"
+    },
+    {
+      "name": "eoo.logging.file.max-index",
+      "defaultValue": 10
+    },
+    {
+      "name": "eoo.logging.file.max-size",
+      "defaultValue": "10 MB"
+    },
+    {
+      "name": "eoo.logging.file.min-index",
+      "defaultValue": 1
+    },
+    {
+      "name": "eoo.logging.file.prefix",
+      "defaultValue": "application"
+    },
+    {
+      "name": "eoo.logging.logstash.host",
+      "defaultValue": "localhost"
+    },
+    {
+      "name": "eoo.logging.logstash.port",
+      "defaultValue": 5000
+    },
+    {
+      "name": "eoo.logging.logstash.queue-size",
+      "defaultValue": 512
+    },
+    {
+      "name": "eoo.metrics.logs.frequency-report",
+      "defaultValue": 60
+    },
+    {
+      "name": "eoo.cache.hazelcast.time-to-live-seconds",
+      "defaultValue": 3600
+    },
+    {
+      "name": "eoo.cache.hazelcast.backup-count",
+      "defaultValue": 1
+    },
+    {
+      "name": "eoo.cache.caffeine.time-to-live-seconds",
+      "defaultValue": 3600
+    },
+    {
+      "name": "eoo.cache.caffeine.max-entries",
+      "defaultValue": 100
+    },
+    {
+      "name": "eoo.cache.ehcache.time-to-live-seconds",
+      "defaultValue": 3600
+    },
+    {
+      "name": "eoo.cache.ehcache.max-entries",
+      "defaultValue": 100
+    },
+    {
+      "name": "eoo.cache.infinispan.config-file",
+      "defaultValue": "default-configs/default-jgroups-tcp.xml"
+    },
+    {
+      "name": "eoo.cache.infinispan.stats-enabled",
+      "defaultValue": false
+    },
+    {
+      "name": "eoo.cache.infinispan.local.time-to-live-seconds",
+      "defaultValue": 3600
+    },
+    {
+      "name": "eoo.cache.infinispan.local.max-entries",
+      "defaultValue": 100
+    },
+    {
+      "name": "eoo.cache.infinispan.distributed.time-to-live-seconds",
+      "defaultValue": 60
+    },
+    {
+      "name": "eoo.cache.infinispan.distributed.max-entries",
+      "defaultValue": 100
+    },
+    {
+      "name": "eoo.cache.infinispan.distributed.instance-count",
+      "defaultValue": 1
+    },
+    {
+      "name": "eoo.cache.infinispan.replicated.time-to-live-seconds",
+      "defaultValue": 60
+    },
+    {
+      "name": "eoo.cache.infinispan.replicated.max-entries",
+      "defaultValue": 100
+    },
+    {
+      "name": "eoo.cache.memcached.enabled",
+      "defaultValue": false
+    },
+    {
+      "name": "eoo.cache.memcached.servers",
+      "defaultValue": "localhost:11211"
+    },
+    {
+      "name": "eoo.cache.memcached.expiration",
+      "defaultValue": 300
+    },
+    {
+      "name": "eoo.cache.memcached.use-binary-protocol",
+      "defaultValue": true
+    },
+    {
+      "name": "eoo.cache.memcached.authentication.enabled",
+      "defaultValue": false
+    },
+    {
+      "name": "eoo.cache.memcached.authentication.username",
+      "defaultValue": "username"
+    },
+    {
+      "name": "eoo.cache.memcached.authentication.password",
+      "defaultValue": ""
+    },
+    {
+      "name": "eoo.cache.redis.servers",
+      "defaultValue": [
+        "redis://localhost:6379"
+      ]
+    },
+    {
+      "name": "eoo.cache.redis.expiration",
+      "defaultValue": 300
+    },
+    {
+      "name": "eoo.cache.redis.cluster",
+      "defaultValue": false
+    },
+    {
+      "name": "eoo.cache.redis.connection-pool-size",
+      "defaultValue": 64
+    },
+    {
+      "name": "eoo.cache.redis.connection-minimum-idle-size",
+      "defaultValue": 24
+    },
+    {
+      "name": "eoo.cache.redis.subscription-connection-pool-size",
+      "defaultValue": 50
+    },
+    {
+      "name": "eoo.cache.redis.subscription-connection-minimum-idle-size",
+      "defaultValue": 1
+    },
+    {
+      "name": "eoo.mail.enabled",
+      "defaultValue": false
+    },
+    {
+      "name": "eoo.mail.from",
+      "defaultValue": ""
+    },
+    {
+      "name": "eoo.mail.baseUrl",
+      "defaultValue": ""
+    },
+    {
+      "name": "eoo.security.client-authorization.access-token-uri",
+      "defaultValue": ""
+    },
+    {
+      "name": "eoo.security.client-authorization.token-service-id",
+      "defaultValue": ""
+    },
+    {
+      "name": "eoo.security.client-authorization.client-id",
+      "defaultValue": ""
+    },
+    {
+      "name": "eoo.security.client-authorization.client-secret",
+      "defaultValue": ""
+    },
+    {
+      "name": "eoo.security.authenticatin.jwt.secret",
+      "defaultValue": "secret"
+    },
+    {
+      "name": "eoo.security.authenticatin.jwt.base64-secret",
+      "defaultValue": "base64Secret"
+    },
+    {
+      "name": "eoo.security.authenticatin.jwt.token-validity-in-seconds",
+      "defaultValue": 1800
+    },
+    {
+      "name": "eoo.security.authenticatin.jwt.token-validity-in-seconds-for-remember-me",
+      "defaultValue": 2592000
+    },
+    {
+      "name": "eoo.security.remember-me.key",
+      "defaultValue": "rememberMe"
+    },
+    {
+      "name": "eoo.security.oauth2.audience",
+      "defaultValue": []
+    },
+    {
+      "name": "eoo.api-docs.title",
+      "defaultValue": "Application API"
+    },
+    {
+      "name": "eoo.api-docs.description",
+      "defaultValue": "API documentation"
+    },
+    {
+      "name": "eoo.api-docs.version",
+      "defaultValue": "0.0.1"
+    },
+    {
+      "name": "eoo.api-docs.terms-of-service-url",
+      "defaultValue": ""
+    },
+    {
+      "name": "eoo.api-docs.contact-name",
+      "defaultValue": ""
+    },
+    {
+      "name": "eoo.api-docs.contact-url",
+      "defaultValue": ""
+    },
+    {
+      "name": "eoo.api-docs.contact-email",
+      "defaultValue": ""
+    },
+    {
+      "name": "eoo.api-docs.licence",
+      "defaultValue": ""
+    },
+    {
+      "name": "eoo.api-docs.licence-url",
+      "defaultValue": ""
+    },
+    {
+      "name": "eoo.api-docs.default-include-pattern",
+      "defaultValue": "/api/.*"
+    },
+    {
+      "name": "eoo.api-docs.host",
+      "defaultValue": ""
+    },
+    {
+      "name": "eoo.api-docs.protocols",
+      "defaultValue": []
+    },
+    {
+      "name": "eoo.api-docs.servers",
+      "defaultValue": []
+    },
+    {
+      "name": "eoo.api-docs.use-default-response-messages",
+      "defaultValue": true
+    },
+    {
+      "name": "eoo.social.redirect-after-sign-in",
+      "defaultValue": "/#/home"
+    },
+    {
+      "name": "eoo.gateway.authorized-microservices-endpoints",
+      "defaultValue": {}
+    },
+    {
+      "name": "eoo.gateway.rate-limiting.enabled",
+      "defaultValue": false
+    },
+    {
+      "name": "eoo.gateway.rate-limiting.limit",
+      "defaultValue": 100000
+    },
+    {
+      "name": "eoo.gateway.rate-limiting.duration-in-seconds",
+      "defaultValue": 3600
+    },
+    {
+      "name": "eoo.registry.password",
+      "defaultValue": ""
+    },
+    {
+      "name": "eoo.client-app.name",
+      "defaultValue": "eooApp"
+    },
+    {
+      "name": "eoo.audit-events.retention-period",
+      "defaultValue": 30
+    }
+  ]
 }

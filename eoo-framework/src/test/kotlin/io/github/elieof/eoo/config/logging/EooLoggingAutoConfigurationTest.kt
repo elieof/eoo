@@ -21,6 +21,7 @@ class EooLoggingAutoConfigurationTest {
     fun someTest() {
         this.contextRunner
             .withPropertyValues("eoo.logging.logstash.enabled=true")
+            .withAllowBeanDefinitionOverriding(true)
             .withUserConfiguration(
                 TrivialConfiguration::class.java,
                 RefreshAutoConfiguration::class.java,

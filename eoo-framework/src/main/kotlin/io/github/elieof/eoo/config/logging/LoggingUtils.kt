@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package io.github.elieof.eoo.config.logging
 
 import ch.qos.logback.classic.Level
@@ -19,7 +21,6 @@ import ch.qos.logback.core.spi.ContextAwareBase
 import ch.qos.logback.core.spi.FilterReply
 import ch.qos.logback.core.util.FileSize
 import io.github.elieof.eoo.config.EooProperties
-import java.net.InetSocketAddress
 import net.logstash.logback.appender.LogstashTcpSocketAppender
 import net.logstash.logback.composite.ContextJsonProvider
 import net.logstash.logback.composite.GlobalCustomFieldsJsonProvider
@@ -38,6 +39,7 @@ import net.logstash.logback.encoder.LogstashEncoder
 import net.logstash.logback.stacktrace.ShortenedThrowableConverter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.net.InetSocketAddress
 
 /**
  * Utility methods to add appenders to a [ch.qos.logback.classic.LoggerContext].
@@ -99,9 +101,11 @@ object LoggingUtils {
         fileAppender.triggeringPolicy.start()
 
         val consoleAppender: ConsoleAppender<ILoggingEvent> =
-            (context.getLogger(ROOT_LOGGER_NAME).getAppender(CONSOLE_APPENDER_NAME) ?: context.getLogger(
-                ROOT_LOGGER_NAME
-            ).getAppender(DEFAULT_CONSOLE_APPENDER_NAME)) as ConsoleAppender<ILoggingEvent>
+            (
+                context.getLogger(ROOT_LOGGER_NAME).getAppender(CONSOLE_APPENDER_NAME) ?: context.getLogger(
+                    ROOT_LOGGER_NAME
+                ).getAppender(DEFAULT_CONSOLE_APPENDER_NAME)
+                ) as ConsoleAppender<ILoggingEvent>
         fileAppender.encoder = consoleAppender.encoder
 
         fileAppender.start()

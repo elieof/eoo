@@ -4,27 +4,29 @@ buildscript {
     repositories {
         mavenLocal()
         mavenCentral()
+        jcenter()
         gradlePluginPortal()
         maven { url = uri("https://repo.spring.io/plugins-release") }
     }
 }
 
 plugins {
-    kotlin("jvm") version kotlinVersion
-    kotlin("plugin.spring") version kotlinVersion apply false
+    kotlin("jvm") version Eoo.kotlinVersion
+    kotlin("plugin.spring") version Eoo.kotlinVersion apply false
+    kotlin("kapt") version Eoo.kotlinVersion apply false
 
-    id("org.springframework.boot") version springBootVersion apply false
-    id("io.spring.dependency-management") version springDependenciesManagementVersion apply false
-    id("org.jlleitschuh.gradle.ktlint") version klintVersion
-    id("io.gitlab.arturbosch.detekt") version detektVersion
-    id("org.sonarqube") version sonarqubeVersion apply false
-    id("io.spring.nohttp") version nohttpVersion
-    id("org.jetbrains.dokka") version dokkaVersion apply false
+    id("org.springframework.boot") version Eoo.springBootVersion apply false
+    id("io.spring.dependency-management") version Eoo.springDependenciesManagementVersion apply false
+    id("org.jlleitschuh.gradle.ktlint") version Eoo.klintGVersion
+    id("io.gitlab.arturbosch.detekt") version Eoo.detektVersion
+    id("org.sonarqube") version Eoo.sonarqubeVersion apply false
+    id("io.spring.nohttp") version Eoo.nohttpVersion
+    id("org.jetbrains.dokka") version Eoo.dokkaVersion apply false
     signing
 }
 
 tasks.named<Wrapper>("wrapper") {
-    gradleVersion = "6.6"
+    gradleVersion = Eoo.gradleVersion
     distributionType = Wrapper.DistributionType.ALL
 }
 
@@ -36,6 +38,7 @@ allprojects {
 repositories {
     mavenLocal()
     mavenCentral()
+    jcenter()
     gradlePluginPortal()
     maven { url = uri("https://repo.spring.io/plugins-release") }
 }
@@ -97,12 +100,16 @@ subprojects {
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=all")
             jvmTarget = "11"
+            apiVersion = "1.4"
+            languageVersion = "1.4"
         }
         dependsOn(tasks.ktlintFormat)
     }
 
     ktlint {
         ignoreFailures.set(true)
+        version.set(Eoo.klintVersion)
+        disabledRules.set(setOf("import-ordering", "no-wildcard-imports"))
     }
 }
 
@@ -112,4 +119,32 @@ nohttp {
 
 ktlint {
     ignoreFailures.set(true)
+    version.set(Eoo.klintVersion)
+    disabledRules.set(setOf("import-ordering", "no-wildcard-imports"))
+}
+
+configurations.all {
+    resolutionStrategy {
+        eachDependency {
+            // Force Kotlin to our version
+            if (requested.group == "org.jetbrains.kotlin") {
+                useVersion(Eoo.kotlinVersion)
+            }
+
+            if (requested.group == "io.springfox") {
+                exclude("com.google.code.findbugs", "jsr305")
+            }
+
+            if (requested.group == "org.cassandraunit") {
+                exclude("org.slf4j", "jcl-over-slf4j")
+                exclude("org.slf4j", "slf4j-log4j12")
+            }
+
+            if (requested.group == "net.logstash.logback") {
+                exclude("ch.qos.logback", "logback-core")
+                exclude("ch.qos.logback", "logback-classic")
+                exclude("ch.qos.logback", "logback-access")
+            }
+        }
+    }
 }

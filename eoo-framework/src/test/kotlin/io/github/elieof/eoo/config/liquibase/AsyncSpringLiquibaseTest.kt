@@ -1,19 +1,13 @@
 package io.github.elieof.eoo.config.liquibase
 
-import io.github.elieof.eoo.config.EooProfiles.Companion.SPRING_PROFILE_DEVELOPMENT
-import io.github.elieof.eoo.config.EooProfiles.Companion.SPRING_PROFILE_HEROKU
-import io.github.elieof.eoo.config.EooProfiles.Companion.SPRING_PROFILE_NO_LIQUIBASE
-import io.github.elieof.eoo.config.EooProfiles.Companion.SPRING_PROFILE_PRODUCTION
+import io.github.elieof.eoo.config.EooProfiles.SPRING_PROFILE_DEVELOPMENT
+import io.github.elieof.eoo.config.EooProfiles.SPRING_PROFILE_HEROKU
+import io.github.elieof.eoo.config.EooProfiles.SPRING_PROFILE_NO_LIQUIBASE
+import io.github.elieof.eoo.config.EooProfiles.SPRING_PROFILE_PRODUCTION
 import io.github.elieof.eoo.config.liquibase.AsyncSpringLiquibase.Companion.NUMBER_1000L
 import io.github.elieof.eoo.config.liquibase.AsyncSpringLiquibase.Companion.SLOWNESS_THRESHOLD
 import io.github.elieof.eoo.test.LogbackRecorder
 import io.github.elieof.eoo.test.LogbackRecorder.Event
-import java.sql.Connection
-import java.sql.SQLException
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.locks.ReentrantLock
-import javax.sql.DataSource
-import kotlin.concurrent.withLock
 import liquibase.Liquibase
 import liquibase.exception.LiquibaseException
 import org.assertj.core.api.Assertions.assertThat
@@ -30,6 +24,12 @@ import org.springframework.core.env.Environment
 import org.springframework.core.task.SimpleAsyncTaskExecutor
 import org.springframework.core.task.TaskExecutor
 import org.springframework.mock.env.MockEnvironment
+import java.sql.Connection
+import java.sql.SQLException
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.locks.ReentrantLock
+import javax.sql.DataSource
+import kotlin.concurrent.withLock
 
 class AsyncSpringLiquibaseTest {
 
@@ -235,9 +235,9 @@ class AsyncSpringLiquibaseTest {
 
         @Throws(LiquibaseException::class)
         override fun initDb() {
-                synchronized(executor) {
-                    super.initDb()
-                }
+            synchronized(executor) {
+                super.initDb()
+            }
         }
 
         // This should never happen

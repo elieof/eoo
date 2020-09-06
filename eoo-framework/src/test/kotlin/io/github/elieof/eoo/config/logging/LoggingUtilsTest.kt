@@ -20,7 +20,6 @@ import io.github.elieof.eoo.config.logging.LoggingUtils.ASYNC_LOGSTASH_APPENDER_
 import io.github.elieof.eoo.config.logging.LoggingUtils.CONSOLE_APPENDER_NAME
 import io.github.elieof.eoo.config.logging.LoggingUtils.FILE_APPENDER_NAME
 import io.github.elieof.eoo.config.logging.LoggingUtils.LOGGER_LOGBOOK
-import java.net.InetSocketAddress
 import net.logstash.logback.appender.LogstashTcpSocketAppender
 import net.logstash.logback.composite.loggingevent.LoggingEventJsonProviders
 import net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder
@@ -28,6 +27,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.InstanceOfAssertFactories.type
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.net.InetSocketAddress
 
 internal class LoggingUtilsTest {
 
@@ -181,13 +181,17 @@ internal class LoggingUtilsTest {
 
         val logBookLogger = context.getLogger(LOGGER_LOGBOOK)
         assertThat(logBookLogger).isNotNull
-        assertThat(logBookLogger.getAppender(ACCESS_FILE_APPENDER_NAME)).isNotNull.isInstanceOf(RollingFileAppender::class.java)
+        assertThat(logBookLogger.getAppender(ACCESS_FILE_APPENDER_NAME)).isNotNull.isInstanceOf(
+            RollingFileAppender::class.java
+        )
 
         val logger = context.getLogger(ROOT_LOGGER_NAME)
         assertThat(logger).isNotNull
         assertThat(logger.getAppender(CONSOLE_APPENDER_NAME)).isNotNull.isInstanceOf(ConsoleAppender::class.java)
         assertThat(logger.getAppender(FILE_APPENDER_NAME)).isNotNull.isInstanceOf(RollingFileAppender::class.java)
-        assertThat(logger.getAppender(ASYNC_LOGSTASH_APPENDER_NAME)).isNotNull.isInstanceOf(LogstashTcpSocketAppender::class.java)
+        assertThat(logger.getAppender(ASYNC_LOGSTASH_APPENDER_NAME)).isNotNull.isInstanceOf(
+            LogstashTcpSocketAppender::class.java
+        )
 
         logger.detachAppender(CONSOLE_APPENDER_NAME)
         logger.detachAppender(FILE_APPENDER_NAME)
