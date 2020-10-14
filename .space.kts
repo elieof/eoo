@@ -9,7 +9,8 @@ job("Build and run tests") {
         env["USERNAME"] = Secrets("github_username")
         env["PASSWORD"] = Secrets("github_token")
        kotlinScript { api ->
-           api.gradlew("build publishAllPublicationsToGitHubPackagesRepository")
+           api.gradlew("build")
+           api.gradlew("publishAllPublicationsToGitHubPackagesRepository")
        }
    }
 }
