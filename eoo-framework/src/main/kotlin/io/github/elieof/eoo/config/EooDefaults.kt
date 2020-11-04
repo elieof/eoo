@@ -1,6 +1,6 @@
 package io.github.elieof.eoo.config
 
-import java.util.LinkedHashMap
+import java.util.*
 
 /**
  * Default values for [EooProperties]
@@ -141,7 +141,7 @@ object EooDefaults {
         }
 
         object Oauth2 {
-            val audience = arrayOf<String>()
+            val audience = emptyArray<String>()
         }
     }
 
@@ -157,9 +157,15 @@ object EooDefaults {
         const val licenseUrl = ""
         const val defaultIncludePattern = "/api/.*"
         const val host = ""
-        val protocols = arrayOf<String>()
-        val servers = arrayOf<String>()
+        val protocols = emptyArray<String>()
+        val servers = emptyArray<EooProperties.ApiDocs.Server>()
         const val useDefaultResponseMessages = true
+
+        object Server {
+            const val name = ""
+            const val url = ""
+            const val description = ""
+        }
     }
 
     object Social {
@@ -177,7 +183,7 @@ object EooDefaults {
     }
 
     object Ribbon {
-        val displayOnActiveProfiles = arrayOf<String>()
+        val displayOnActiveProfiles = emptyArray<String>()
     }
 
     object Registry {

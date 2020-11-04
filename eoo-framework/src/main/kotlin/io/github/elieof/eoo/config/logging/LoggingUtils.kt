@@ -21,6 +21,7 @@ import ch.qos.logback.core.spi.ContextAwareBase
 import ch.qos.logback.core.spi.FilterReply
 import ch.qos.logback.core.util.FileSize
 import io.github.elieof.eoo.config.EooProperties
+import mu.KotlinLogging
 import net.logstash.logback.appender.LogstashTcpSocketAppender
 import net.logstash.logback.composite.ContextJsonProvider
 import net.logstash.logback.composite.GlobalCustomFieldsJsonProvider
@@ -37,15 +38,13 @@ import net.logstash.logback.composite.loggingevent.ThreadNameJsonProvider
 import net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder
 import net.logstash.logback.encoder.LogstashEncoder
 import net.logstash.logback.stacktrace.ShortenedThrowableConverter
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import java.net.InetSocketAddress
 
 /**
  * Utility methods to add appenders to a [ch.qos.logback.classic.LoggerContext].
  */
 object LoggingUtils {
-    private val logger: Logger = LoggerFactory.getLogger(LoggingUtils::class.java)
+    private val logger = KotlinLogging.logger {}
     internal const val FILE_APPENDER_NAME = "FILE"
     internal const val ACCESS_FILE_APPENDER_NAME = "ACCESS"
     internal const val DEFAULT_CONSOLE_APPENDER_NAME = "console"

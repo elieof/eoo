@@ -7,20 +7,20 @@ import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.core.instrument.TimeGauge
 import io.micrometer.core.instrument.Timer
 import io.micrometer.core.instrument.search.Search
-import org.slf4j.LoggerFactory
+import mu.KotlinLogging
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation
 import org.springframework.boot.actuate.endpoint.web.annotation.WebEndpoint
 import java.util.concurrent.TimeUnit
 import java.util.function.Consumer
 
+private val logger = KotlinLogging.logger {}
+
 @WebEndpoint(id = "eoometrics")
-class EooMetricsEndpoint(private val meterRegistry: MeterRegistry) {
+public class EooMetricsEndpoint(private val meterRegistry: MeterRegistry) {
 
-    companion object {
-        private val logger = LoggerFactory.getLogger(EooMetricsEndpoint::class.java)
-
+    public companion object {
         /** Constant `MISSING_NAME_TAG_MESSAGE="Missing name tag for metric {}"`  */
-        const val MISSING_NAME_TAG_MESSAGE = "Missing name tag for metric {}"
+        public const val MISSING_NAME_TAG_MESSAGE: String = "Missing name tag for metric {}"
     }
 
     /**
@@ -33,7 +33,7 @@ class EooMetricsEndpoint(private val meterRegistry: MeterRegistry) {
      * another Map containing metrics related to this category as Value
      */
     @ReadOperation
-    fun allMetrics(): Map<String, Map<String, Any>> {
+    public fun allMetrics(): Map<String, Map<String, Any>> {
         val results: MutableMap<String, Map<String, Any>> = HashMap()
         // JVM stats
         results["jvm"] = jvmMemoryMetrics()

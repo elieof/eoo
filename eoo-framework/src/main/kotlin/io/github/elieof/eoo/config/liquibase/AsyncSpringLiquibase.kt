@@ -4,7 +4,7 @@ import io.github.elieof.eoo.config.EooProfiles.SPRING_PROFILE_DEVELOPMENT
 import io.github.elieof.eoo.config.EooProfiles.SPRING_PROFILE_HEROKU
 import io.github.elieof.eoo.config.EooProfiles.SPRING_PROFILE_NO_LIQUIBASE
 import liquibase.exception.LiquibaseException
-import org.slf4j.LoggerFactory
+import mu.KotlinLogging
 import org.springframework.boot.autoconfigure.liquibase.DataSourceClosingSpringLiquibase
 import org.springframework.core.env.Environment
 import org.springframework.core.env.Profiles
@@ -12,11 +12,13 @@ import org.springframework.util.StopWatch
 import java.sql.SQLException
 import java.util.concurrent.Executor
 
+private val logger = KotlinLogging.logger {}
+
 /**
  * Start Liquibase asynchronously When using profile [SPRING_PROFILE_DEVELOPMENT]
  */
 open class AsyncSpringLiquibase(
-    val executor: Executor,
+    private val executor: Executor,
     private val env: Environment
 ) : DataSourceClosingSpringLiquibase() {
 
@@ -46,7 +48,7 @@ open class AsyncSpringLiquibase(
         /** Constant `SLOWNESS_MESSAGE="Warning, Liquibase took more than {} se"{trunked}`  */
         const val SLOWNESS_MESSAGE = "Warning, Liquibase took more than {} seconds to start up!"
 
-        private val logger = LoggerFactory.getLogger(AsyncSpringLiquibase::class.java)
+//        private val logger = LoggerFactory.getLogger(AsyncSpringLiquibase::class.java)
     }
 
     override fun afterPropertiesSet() {

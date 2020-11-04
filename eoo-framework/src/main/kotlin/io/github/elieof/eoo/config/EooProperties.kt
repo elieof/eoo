@@ -222,9 +222,15 @@ data class EooProperties(
         val defaultIncludePattern: String = EooDefaults.ApiDocs.defaultIncludePattern,
         val host: String = EooDefaults.ApiDocs.host,
         val protocols: Array<String> = EooDefaults.ApiDocs.protocols,
-        val servers: Array<String> = EooDefaults.ApiDocs.servers,
+        val servers: Array<Server> = EooDefaults.ApiDocs.servers,
         val useDefaultResponseMessages: Boolean = EooDefaults.ApiDocs.useDefaultResponseMessages,
-    )
+    ) {
+        data class Server(
+            val name: String = EooDefaults.ApiDocs.Server.name,
+            val url: String = EooDefaults.ApiDocs.Server.url,
+            val description: String = EooDefaults.ApiDocs.Server.description
+        )
+    }
 
     data class Social(
         val redirectAfterSignIn: String = EooDefaults.Social.redirectAfterSignIn

@@ -1,5 +1,5 @@
 import java.io.FileInputStream
-import java.util.Properties
+import java.util.*
 
 plugins {
     jacoco
@@ -202,6 +202,7 @@ dependencies {
 //    implementation(platform(Eoo.Deps.Spring.Boot.dependencies))
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
 
     kapt(Eoo.Deps.Spring.Boot.configurationProcessor)
 //    kapt("org.springframework.boot:spring-boot-configuration-processor")
@@ -219,9 +220,10 @@ dependencies {
 
 //    implementation("com.fasterxml.jackson.core:jackson-databind:2.11.1")
 //    implementation("com.fasterxml.jackson.core:jackson-annotations:2.11.1")
-//    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.1")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     testImplementation("com.h2database:h2")
+    testImplementation(Eoo.Deps.mockk)
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude("org.junit.vintage", "junit-vintage-engine")
     }
@@ -230,6 +232,7 @@ dependencies {
     "loggingImplementation"("org.springframework.boot:spring-boot-starter-logging")
     "loggingImplementation"("com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.11.1")
     "loggingImplementation"(Eoo.Deps.Logging.logstash)
+    "loggingImplementation"(Eoo.Deps.Logging.kotlin)
     "loggingImplementation"(Eoo.Deps.Logging.LogBook.spring)
     "loggingImplementation"(Eoo.Deps.Logging.LogBook.logstash)
 //    "loggingImplementation"(Eoo.Deps.Logging.LogBook.json)
@@ -251,6 +254,7 @@ dependencies {
     "cloudImplementation"("io.micrometer:micrometer-core")
 
     "securityImplementation"("org.springframework.boot:spring-boot-starter-security")
+    "securityImplementation"("org.springframework.boot:spring-boot-starter-undertow")
     "securityImplementation"("org.springframework.security:spring-security-data")
     "securityImplementation"(Eoo.Deps.Spring.Security.oauth2)
 }

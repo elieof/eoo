@@ -8,7 +8,7 @@ import org.springframework.boot.SpringApplication
  *
  * If the value is not available in `application.yml` then `dev`  profile will be used as default.
  */
-object DefaultProfileUtil {
+public object DefaultProfileUtil {
     private const val SPRING_PROFILE_DEFAULT = "spring.profiles.default"
 
     /**
@@ -16,7 +16,7 @@ object DefaultProfileUtil {
      *
      * @param app the Spring application.
      */
-    fun addDefaultProfile(app: SpringApplication) {
+    public fun addDefaultProfile(app: SpringApplication) {
         val defProperties: MutableMap<String, Any> = HashMap()
         /*
          * The default profile to use when no other profiles are defined

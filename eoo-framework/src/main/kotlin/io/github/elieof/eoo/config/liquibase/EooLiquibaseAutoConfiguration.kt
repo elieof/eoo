@@ -1,7 +1,7 @@
 package io.github.elieof.eoo.config.liquibase
 
 import io.github.elieof.eoo.config.EooProfiles
-import org.slf4j.LoggerFactory
+import mu.KotlinLogging
 import org.springframework.beans.factory.ObjectProvider
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.AutoConfigureAfter
@@ -16,6 +16,8 @@ import org.springframework.core.env.Profiles
 import java.util.concurrent.Executor
 import javax.sql.DataSource
 
+private val logger = KotlinLogging.logger {}
+
 /**
  * Auto configuration for Liquibase using changelog 'classpath:config/liquibase/master.xml'
  * and based on [LiquibaseAutoConfiguration].
@@ -28,9 +30,6 @@ class EooLiquibaseAutoConfiguration(val environment: Environment) {
 
     companion object {
 
-        private val logger = LoggerFactory.getLogger(EooLiquibaseAutoConfiguration::class.java)
-
-        /** Constant `DISABLED_MESSAGE="Liquibase is disabled"`  */
         const val DISABLED_MESSAGE = "Liquibase is disabled"
 
         /** Constant `DISABLED_MESSAGE="Liquibase is disabled"`  */

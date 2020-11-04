@@ -15,9 +15,12 @@ import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
 import org.mockito.Mockito.doReturn
 import org.mockito.Mockito.doThrow
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.never
+import org.mockito.Mockito.spy
+import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 import org.springframework.core.env.ConfigurableEnvironment
 import org.springframework.core.env.Environment
@@ -48,7 +51,7 @@ class AsyncSpringLiquibaseTest {
         recorder = LogbackRecorder.forClass(MockEnvironment::class.java).reset().capture("ALL")
         environment = MockEnvironment()
         recorder.release()
-        config = Mockito.spy(TestAsyncSpringLiquibase(executor, environment))
+        config = spy(TestAsyncSpringLiquibase(executor, environment))
         recorder = LogbackRecorder.forClass(AsyncSpringLiquibase::class.java).reset().capture("ALL")
     }
 
@@ -69,7 +72,7 @@ class AsyncSpringLiquibaseTest {
             assertThat(caught).isNull()
         }
         caught = catchThrowable {
-            verify(config, Mockito.never()).initDb()
+            verify(config, never()).initDb()
         }
         assertThat(caught).isNull()
 
@@ -92,7 +95,7 @@ class AsyncSpringLiquibaseTest {
             }
         }
         caught = catchThrowable {
-            verify(config, Mockito.times(1)).initDb()
+            verify(config, times(1)).initDb()
         }
         assertThat(caught).isNull()
 
@@ -120,7 +123,7 @@ class AsyncSpringLiquibaseTest {
             assertThat(caught).isNull()
         }
         caught = catchThrowable {
-            verify(config, Mockito.times(1)).initDb()
+            verify(config, times(1)).initDb()
         }
         assertThat(caught).isNull()
 
@@ -148,7 +151,7 @@ class AsyncSpringLiquibaseTest {
             assertThat(caught).isNull()
         }
         caught = catchThrowable {
-            verify(config, Mockito.times(1)).initDb()
+            verify(config, times(1)).initDb()
         }
         assertThat(caught).isNull()
 
@@ -178,7 +181,7 @@ class AsyncSpringLiquibaseTest {
             assertThat(caught).isNull()
         }
 
-        caught = catchThrowable { verify(config, Mockito.times(1)).initDb() }
+        caught = catchThrowable { verify(config, times(1)).initDb() }
         assertThat(caught).isNull()
 
         val events = recorder.play()
@@ -211,7 +214,7 @@ class AsyncSpringLiquibaseTest {
             assertThat(caught).isNull()
         }
 
-        caught = catchThrowable { verify(config, Mockito.times(1)).initDb() }
+        caught = catchThrowable { verify(config, times(1)).initDb() }
         assertThat(caught).isNull()
 
         val events = recorder.play()
@@ -226,12 +229,11 @@ class AsyncSpringLiquibaseTest {
         assertThat(event1.thrown).isEqualTo(exception.toString())
     }
 
-    private open class TestAsyncSpringLiquibase(
+    private open inner class TestAsyncSpringLiquibase(
         executor: TaskExecutor,
         environment: Environment,
         var sleep: Long = 0L
-    ) :
-        AsyncSpringLiquibase(executor, environment) {
+    ) : AsyncSpringLiquibase(executor, environment) {
 
         @Throws(LiquibaseException::class)
         override fun initDb() {
@@ -242,9 +244,9 @@ class AsyncSpringLiquibaseTest {
 
         // This should never happen
         override fun getDataSource(): DataSource {
-            val source = Mockito.mock(DataSource::class.java)
+            val source = mock(DataSource::class.java)
             try {
-                doReturn(Mockito.mock(Connection::class.java)).`when`(source).connection
+                doReturn(mock(Connection::class.java)).`when`(source).connection
             } catch (x: SQLException) {
                 // This should never happen
                 throw Error(x)
