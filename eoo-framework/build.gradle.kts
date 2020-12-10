@@ -207,8 +207,6 @@ dependencies {
     kapt(Eoo.Deps.Spring.Boot.configurationProcessor)
 //    kapt("org.springframework.boot:spring-boot-configuration-processor")
     kapt(Eoo.Deps.hibernateJpaModelGen)
-    kapt(Eoo.Deps.jaxbApi)
-    kapt(Eoo.Deps.jaxbImpl)
 
     implementation("org.springframework.boot:spring-boot-autoconfigure")
     implementation("org.springframework.boot:spring-boot-starter-aop")

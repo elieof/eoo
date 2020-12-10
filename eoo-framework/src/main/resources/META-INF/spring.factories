@@ -2,5 +2,4 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   io.github.elieof.eoo.config.apidoc.SpringfoxAutoConfiguration,\
   io.github.elieof.eoo.config.apidoc.SpringfoxPluginsAutoConfiguration,\
   io.github.elieof.eoo.config.logging.EooLoggingAutoConfiguration,\
-  io.github.elieof.eoo.config.metric.EooMetricsEndpointAutoConfiguration,\
-  io.github.elieof.eoo.config.metric.EooLoggingMetricsExportAutoConfiguration
+  io.github.elieof.eoo.config.metric.EooMetricsEndpointAutoConfiguration

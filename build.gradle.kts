@@ -17,7 +17,7 @@ plugins {
 
     id("org.springframework.boot") version Eoo.springBootVersion apply false
     id("io.spring.dependency-management") version Eoo.springDependenciesManagementVersion apply false
-    id("org.jlleitschuh.gradle.ktlint") version Eoo.klintGVersion
+    id("org.jlleitschuh.gradle.ktlint") version Eoo.ktlintGVersion
     id("io.gitlab.arturbosch.detekt") version Eoo.detektVersion
     id("org.sonarqube") version Eoo.sonarqubeVersion apply false
     id("io.spring.nohttp") version Eoo.nohttpVersion
@@ -108,7 +108,7 @@ subprojects {
 
     ktlint {
         ignoreFailures.set(true)
-        version.set(Eoo.klintVersion)
+        version.set(Eoo.ktlintVersion)
         disabledRules.set(setOf("import-ordering", "no-wildcard-imports"))
     }
 }
@@ -119,7 +119,7 @@ nohttp {
 
 ktlint {
     ignoreFailures.set(true)
-    version.set(Eoo.klintVersion)
+    version.set(Eoo.ktlintVersion)
     disabledRules.set(setOf("import-ordering", "no-wildcard-imports"))
 }
 

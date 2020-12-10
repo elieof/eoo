@@ -7,7 +7,6 @@ import io.github.elieof.eoo.config.logging.LoggingUtils.addAccessFileAppender
 import io.github.elieof.eoo.config.logging.LoggingUtils.addFileAppender
 import io.github.elieof.eoo.config.logging.LoggingUtils.addJsonConsoleAppender
 import io.github.elieof.eoo.config.logging.LoggingUtils.addLogstashTcpSocketAppender
-import io.github.elieof.eoo.config.logging.LoggingUtils.setMetricsMarkerLogbackFilter
 import net.logstash.logback.encoder.LogstashEncoder
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -63,9 +62,6 @@ class EooLoggingAutoConfiguration(
         }
         if (loggingProperties.logstash.enabled) {
             addLogstashTcpSocketAppender(context, customFields, loggingProperties.logstash)
-        }
-        if (eooProperties.metrics.logs.enabled) {
-            setMetricsMarkerLogbackFilter(context, loggingProperties.useJsonFormat)
         }
     }
 

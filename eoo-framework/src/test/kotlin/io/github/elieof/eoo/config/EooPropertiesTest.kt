@@ -158,19 +158,6 @@ internal class EooPropertiesTest {
         assertThat(obj.maxHistory).isEqualTo(value)
     }
 
-    @Test
-    fun testMetricsLogsEnabled() {
-        val obj = properties.metrics.logs
-        val value = EooDefaults.Metrics.Logs.enabled
-        assertThat(obj.enabled).isEqualTo(value)
-    }
-
-    @Test
-    fun testMetricsLogsReportFrequency() {
-        val obj = properties.metrics.logs
-        val value = EooDefaults.Metrics.Logs.frequencyReport
-        assertThat(obj.frequencyReport).isEqualTo(value)
-    }
 
     @Test
     fun testCacheHazelcastTimeToLiveSeconds() {

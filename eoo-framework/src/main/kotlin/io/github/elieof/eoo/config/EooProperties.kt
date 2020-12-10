@@ -9,7 +9,6 @@ data class EooProperties(
     val async: Async = Async(),
     val http: Http = Http(),
     val logging: Logging = Logging(),
-    val metrics: Metrics = Metrics(),
     val cache: Cache = Cache(),
     val mail: Mail = Mail(),
     val security: Security = Security(),
@@ -83,16 +82,6 @@ data class EooProperties(
             val port: Int = EooDefaults.Logging.Logstash.port,
             /** Logstash queue size. */
             val queueSize: Int = EooDefaults.Logging.Logstash.queueSize
-        )
-    }
-
-    data class Metrics(val logs: Logs = Logs()) {
-
-        data class Logs(
-            /** Enable metrics logs. */
-            val enabled: Boolean = EooDefaults.Metrics.Logs.enabled,
-            /** Metrics logs frequency report in seconds. */
-            val frequencyReport: Long = EooDefaults.Metrics.Logs.frequencyReport
         )
     }
 

@@ -26,8 +26,8 @@ class UaaAutoConfiguration(val eooProperties: EooProperties) {
      *
      * loadBalancedResourceDetails.
      *
-     * @param loadBalancerClient a [org.springframework.cloud.client.loadbalancer.LoadBalancerClient] object.
-     * @return a [io.github.jhipster.security.uaa.LoadBalancedResourceDetails] object.
+     * @param loadBalancerClient a [LoadBalancerClient] object.
+     * @return a [LoadBalancedResourceDetails] object.
      */
     @Bean
     fun loadBalancedResourceDetails(loadBalancerClient: LoadBalancerClient): LoadBalancedResourceDetails {

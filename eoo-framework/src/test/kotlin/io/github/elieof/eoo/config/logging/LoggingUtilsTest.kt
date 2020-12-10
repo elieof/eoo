@@ -200,33 +200,4 @@ internal class LoggingUtilsTest {
         context.removeListener(loggerContextListener)
     }
 
-    @Test
-    fun setMetricsMarkerLogbackFilter() {
-        loggingProperties = EooProperties.Logging(
-            useJsonFormat = true,
-            file = EooProperties.Logging.AppFile(enabled = true, dir = "./out"),
-            accessFile = EooProperties.Logging.AccessFile(enabled = true, dir = "./out"),
-            logstash = EooProperties.Logging.Logstash(true)
-        )
-        LoggingUtils.addContextListener(context, "{\"customFields\": true}", loggingProperties)
-        val loggerContextListener = context.copyOfListenerList[0]
-        loggerContextListener.onStart(context)
-        LoggingUtils.setMetricsMarkerLogbackFilter(context, loggingProperties.useJsonFormat)
-
-        val logger = context.getLogger(ROOT_LOGGER_NAME)
-        assertThat(logger).isNotNull
-        val appender = logger.getAppender(FILE_APPENDER_NAME)
-        assertThat(appender).isNotNull
-        assertThat(appender.copyOfAttachedFiltersList).isNotEmpty.hasSize(1)
-        assertThat(appender.copyOfAttachedFiltersList[0]).asInstanceOf(type(EvaluatorFilter::class.java))
-            .hasFieldOrPropertyWithValue("onMatch", FilterReply.DENY)
-            .extracting { it.evaluator }
-            .isInstanceOf(OnMarkerEvaluator::class.java)
-
-        logger.detachAppender(CONSOLE_APPENDER_NAME)
-        logger.detachAppender(FILE_APPENDER_NAME)
-        logger.detachAppender(ACCESS_FILE_APPENDER_NAME)
-        logger.detachAppender(ASYNC_LOGSTASH_APPENDER_NAME)
-        context.removeListener(loggerContextListener)
-    }
 }

@@ -5,12 +5,10 @@ package io.github.elieof.eoo.config.logging
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME
 import ch.qos.logback.classic.LoggerContext
-import ch.qos.logback.classic.boolex.OnMarkerEvaluator
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.classic.spi.LoggerContextListener
 import ch.qos.logback.core.ConsoleAppender
-import ch.qos.logback.core.filter.EvaluatorFilter
 import ch.qos.logback.core.rolling.FixedWindowRollingPolicy
 import ch.qos.logback.core.rolling.RollingFileAppender
 import ch.qos.logback.core.rolling.RollingPolicy
@@ -18,7 +16,6 @@ import ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy
 import ch.qos.logback.core.rolling.TriggeringPolicyBase
 import ch.qos.logback.core.spi.ContextAwareBase
-import ch.qos.logback.core.spi.FilterReply
 import ch.qos.logback.core.util.FileSize
 import io.github.elieof.eoo.config.EooProperties
 import mu.KotlinLogging
@@ -189,37 +186,6 @@ object LoggingUtils {
         val loggerContextListener = LogbackLoggerContextListener(properties, customFields)
         loggerContextListener.context = context
         context.addListener(loggerContextListener)
-    }
-
-    /**
-     * Configure a log filter to remove "metrics" logs from all appenders except the "LOGSTASH" appender
-     *
-     * @param context the logger context
-     * @param useJsonFormat whether to use JSON format
-     */
-    fun setMetricsMarkerLogbackFilter(context: LoggerContext, useJsonFormat: Boolean) {
-        logger.info("Filtering metrics logs from all appenders except the {} appender", ASYNC_LOGSTASH_APPENDER_NAME)
-        val onMarkerMetricsEvaluator = OnMarkerEvaluator()
-        onMarkerMetricsEvaluator.context = context
-        onMarkerMetricsEvaluator.addMarker("metrics")
-        onMarkerMetricsEvaluator.start()
-        val metricsFilter: EvaluatorFilter<ILoggingEvent> = EvaluatorFilter()
-        metricsFilter.context = context
-        metricsFilter.evaluator = onMarkerMetricsEvaluator
-        metricsFilter.onMatch = FilterReply.DENY
-        metricsFilter.start()
-        context.loggerList.forEach { logger ->
-            logger.iteratorForAppenders().forEachRemaining { appender ->
-                if (appender.name != ASYNC_LOGSTASH_APPENDER_NAME &&
-                    !(appender.name == CONSOLE_APPENDER_NAME && useJsonFormat)
-                ) {
-                    this.logger.debug("Filter metrics logs from the {} appender", appender.name)
-                    appender.context = context
-                    appender.addFilter(metricsFilter)
-                    appender.start()
-                }
-            }
-        }
     }
 
     private fun getLogFileName(fileProperties: EooProperties.Logging.File): String {
