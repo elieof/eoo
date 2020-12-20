@@ -4,7 +4,7 @@ object Eoo {
     const val kotlinVersion = "1.4.21"
     const val gradleVersion = "6.7.1"
 
-    const val springBootVersion = "2.3.6.RELEASE"
+    const val springBootVersion = "2.3.7.RELEASE"
     const val springDependenciesManagementVersion = "1.0.10.RELEASE"
 
     const val ktlintVersion = "0.40.0"
@@ -14,13 +14,13 @@ object Eoo {
     const val nohttpVersion = "0.0.5.RELEASE"
     const val dokkaVersion = "1.4.20"
 
-    const val awsJavaVersion = "1.11.915"
+    const val awsJavaVersion = "1.11.922"
     const val azureSpringCloudClientVersion = "2.3.0"
     const val azureSpringBootVersion = "2.6.2"
     const val bucket4jVersion = "4.10.0"
     const val cassandraUnitVersion = "4.3.1.0"
     const val couchmoveVersion = "3.1"
-    const val cucumberJvmVersion = "6.9.0"
+    const val cucumberJvmVersion = "6.9.1"
     const val commonsIoVersion = "2.8.0"
 
     /**
@@ -45,7 +45,7 @@ object Eoo {
     const val mongobeeVersion = "0.13"
     const val mockito4kotlinVersion = "0.4.1"
     const val mockitokotlin2Version = "2.2.0"
-    const val mockkVersion = "1.10.2"
+    const val mockkVersion = "1.10.3-jdk8"
     const val mssqlJdbcVersion = "8.4.1.jre8"
     const val mysqlVersion = "8.0.22"
     const val neo4jVersion = "0.0.13"
@@ -56,7 +56,6 @@ object Eoo {
     const val reflectionsVersion = "0.9.11"
     const val springDataReleaseTrainVersion = "Moore-SR7"
     const val springCloudVersion = "Hoxton.SR9"
-    const val springCloudConnectorVersion = "2.0.7.RELEASE"
     const val springCloudNetflixVersion = "2.2.3.RELEASE"
 
     //    const val springDataJestVersion = "3.3.1.RELEASE"
@@ -64,7 +63,7 @@ object Eoo {
     const val springSecurityJwtVersion = "1.1.1.RELEASE"
     const val springSecurityOauthVersion = "2.5.0.RELEASE"
     const val springfoxVersion = "3.0.0"
-    const val testcontainersVersion = "1.15.0"
+    const val testcontainersVersion = "1.15.1"
     const val xmemcachedVersion = "2.4.6"
     const val xmemcachedProviderVersion = "4.1.3"
 
@@ -225,14 +224,6 @@ object Eoo {
                     const val websocket = "$prefix-websocket:$springBootVersion"
                     const val webServices = "$prefix-web-services:$springBootVersion"
                 }
-            }
-
-            object Cloud {
-                private const val prefix = "org.springframework.cloud"
-
-                const val service = "$prefix:spring-cloud-spring-service-connector:$springCloudConnectorVersion"
-                const val heroku = "$prefix:spring-cloud-heroku-connector:$springCloudConnectorVersion"
-                const val localConfig = "$prefix:spring-cloud-localconfig-connector:$springCloudConnectorVersion"
             }
 
             object Security {

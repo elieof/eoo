@@ -19,12 +19,10 @@ public open class ExceptionHandlingAsyncTaskExecutor(
         public const val EXCEPTION_MESSAGE: String = "Caught async exception"
     }
 
-    /** {@inheritDoc}  */
     override fun execute(task: Runnable) {
         executor.execute(createWrappedRunnable(task))
     }
 
-    /** {@inheritDoc}  */
     override fun execute(task: Runnable, startTimeout: Long) {
         executor.execute(createWrappedRunnable(task), startTimeout)
     }
@@ -60,17 +58,14 @@ public open class ExceptionHandlingAsyncTaskExecutor(
         logger.error(EXCEPTION_MESSAGE, e)
     }
 
-    /** {@inheritDoc}  */
     override fun submit(task: Runnable): Future<*> {
         return executor.submit(createWrappedRunnable(task))
     }
 
-    /** {@inheritDoc}  */
     override fun <T> submit(task: Callable<T>): Future<T> {
         return executor.submit(createCallable(task))
     }
 
-    /** {@inheritDoc}  */
     @Throws(Exception::class)
     override fun destroy() {
         if (executor is DisposableBean) {
@@ -79,7 +74,6 @@ public open class ExceptionHandlingAsyncTaskExecutor(
         }
     }
 
-    /** {@inheritDoc}  */
     @Throws(Exception::class)
     override fun afterPropertiesSet() {
         if (executor is InitializingBean) {

@@ -10,25 +10,25 @@ import org.springframework.security.core.Authentication
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-internal class AjaxAuthenticationSuccessHandlerTest {
+class AjaxLogoutSuccessHandlerTest {
 
     private lateinit var request: HttpServletRequest
     private lateinit var response: HttpServletResponse
     private lateinit var authentication: Authentication
-    private lateinit var handler: AjaxAuthenticationSuccessHandler
+    private lateinit var handler: AjaxLogoutSuccessHandler
 
     @BeforeEach
     fun setUp() {
         request = mockk()
         response = spyk()
         authentication = mockk()
-        handler = AjaxAuthenticationSuccessHandler()
+        handler = AjaxLogoutSuccessHandler()
     }
 
     @Test
-    fun onAuthenticationSuccess() {
+    fun onLogoutSuccess() {
         val caughtException = Assertions.catchThrowable {
-            handler.onAuthenticationSuccess(request, response, authentication)
+            handler.onLogoutSuccess(request, response, authentication)
             verify { response.status = HttpServletResponse.SC_OK }
         }
         Assertions.assertThat(caughtException).isNull()

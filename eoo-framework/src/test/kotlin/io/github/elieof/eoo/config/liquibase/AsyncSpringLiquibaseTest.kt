@@ -8,6 +8,8 @@ import io.github.elieof.eoo.config.liquibase.AsyncSpringLiquibase.Companion.NUMB
 import io.github.elieof.eoo.config.liquibase.AsyncSpringLiquibase.Companion.SLOWNESS_THRESHOLD
 import io.github.elieof.eoo.test.LogbackRecorder
 import io.github.elieof.eoo.test.LogbackRecorder.Event
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import liquibase.Liquibase
 import liquibase.exception.LiquibaseException
 import org.assertj.core.api.Assertions.assertThat
@@ -37,6 +39,7 @@ import kotlin.concurrent.withLock
 class AsyncSpringLiquibaseTest {
 
     private val exception = LiquibaseException("Error!")
+    private val sqlException = SQLException("Error!")
 
     private lateinit var executor: SimpleAsyncTaskExecutor
     private lateinit var environment: ConfigurableEnvironment
@@ -229,10 +232,26 @@ class AsyncSpringLiquibaseTest {
         assertThat(event1.thrown).isEqualTo(exception.toString())
     }
 
+    @Test
+    fun testExceptionOnDataSourceConnexion() {
+        environment.setActiveProfiles(SPRING_PROFILE_DEVELOPMENT, SPRING_PROFILE_HEROKU)
+        config = spy(TestAsyncSpringLiquibase(executor, environment, doConnect = false))
+
+        config.afterPropertiesSet()
+
+        val events = recorder.play()
+        assertThat(events).hasSize(1)
+        val event0: Event = events[0]
+        assertThat(event0.level).isEqualTo("ERROR")
+        assertThat(event0.message).isEqualTo(AsyncSpringLiquibase.EXCEPTION_MESSAGE)
+        assertThat(event0.thrown).isEqualTo(sqlException.toString())
+    }
+
     private open inner class TestAsyncSpringLiquibase(
         executor: TaskExecutor,
         environment: Environment,
-        var sleep: Long = 0L
+        var sleep: Long = 0L,
+        var doConnect: Boolean = true
     ) : AsyncSpringLiquibase(executor, environment) {
 
         @Throws(LiquibaseException::class)
@@ -246,7 +265,11 @@ class AsyncSpringLiquibaseTest {
         override fun getDataSource(): DataSource {
             val source = mock(DataSource::class.java)
             try {
-                doReturn(mock(Connection::class.java)).`when`(source).connection
+                if (doConnect) {
+                    doReturn(mock(Connection::class.java)).`when`(source).connection
+                } else {
+                    doThrow(sqlException).`when`(source).connection
+                }
             } catch (x: SQLException) {
                 // This should never happen
                 throw Error(x)
@@ -260,11 +283,8 @@ class AsyncSpringLiquibaseTest {
 
         override fun performUpdate(liquibase: Liquibase?) {
             if (sleep > 0) {
-                try {
-                    Thread.sleep(sleep)
-                } catch (x: InterruptedException) {
-                    // This should never happen
-                    throw Error(x)
+                runBlocking {
+                    delay(sleep)
                 }
             }
         }

@@ -1,9 +1,12 @@
 package io.github.elieof.eoo.config.cache
 
+import io.mockk.every
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.boot.info.BuildProperties
 import org.springframework.boot.info.GitProperties
+import java.lang.reflect.Method
 import java.util.*
 
 class PrefixedKeyGeneratorTest {
@@ -44,5 +47,16 @@ class PrefixedKeyGeneratorTest {
     fun generatesRandomPrefix() {
         val prefixedKeyGenerator = PrefixedKeyGenerator(null, null)
         assertThat(prefixedKeyGenerator.prefix.length).isEqualTo(12)
+    }
+
+    @Test
+    fun generatesRandomPrefixKey() {
+        val gitProperties = Properties()
+        gitProperties["commit.id"] = "1234567"
+        val prefixedKeyGenerator = PrefixedKeyGenerator(GitProperties(gitProperties), null)
+        val method = String::class.java.getMethod("equalsIgnoreCase", String::class.java)
+        assertThat(prefixedKeyGenerator.generate("target", method, "test")).isEqualTo(
+            PrefixedSimpleKey("1234567", "equalsIgnoreCase", listOf("test"))
+        )
     }
 }
