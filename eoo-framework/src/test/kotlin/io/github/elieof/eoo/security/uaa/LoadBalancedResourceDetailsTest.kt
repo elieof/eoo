@@ -1,6 +1,5 @@
 package io.github.elieof.eoo.security.uaa
 
-
 import io.github.elieof.eoo.security.uaa.LoadBalancedResourceDetails.Companion.EXCEPTION_MESSAGE
 import io.github.elieof.eoo.test.LogbackRecorder
 import io.github.elieof.eoo.test.LogbackRecorder.Event
@@ -18,7 +17,6 @@ import org.mockito.Mockito.spy
 import org.mockito.Mockito.verify
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient
 import java.net.URI
-
 
 internal class LoadBalancedResourceDetailsTest {
     companion object {
@@ -94,4 +92,3 @@ internal class LoadBalancedResourceDetailsTest {
         assertThat(event.thrown).isNull()
     }
 }
-

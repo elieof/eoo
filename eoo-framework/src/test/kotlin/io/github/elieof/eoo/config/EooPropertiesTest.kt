@@ -158,7 +158,6 @@ internal class EooPropertiesTest {
         assertThat(obj.maxHistory).isEqualTo(value)
     }
 
-
     @Test
     fun testCacheHazelcastTimeToLiveSeconds() {
         val obj = properties.cache.hazelcast

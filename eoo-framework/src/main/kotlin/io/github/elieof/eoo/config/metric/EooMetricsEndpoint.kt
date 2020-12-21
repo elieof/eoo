@@ -15,13 +15,17 @@ import java.util.function.Consumer
 
 private val logger = KotlinLogging.logger {}
 
+
 @WebEndpoint(id = "eoometrics")
 public class EooMetricsEndpoint(private val meterRegistry: MeterRegistry) {
 
     public companion object {
         /** Constant `MISSING_NAME_TAG_MESSAGE="Missing name tag for metric {}"`  */
         public const val MISSING_NAME_TAG_MESSAGE: String = "Missing name tag for metric {}"
+        private const val METRIC_JVM = "jvm.gc.pause"
+        private const val METRIC_SERVER: String = "http.server.requests"
     }
+
 
     /**
      * GET /management/eoo-metrics
@@ -38,7 +42,7 @@ public class EooMetricsEndpoint(private val meterRegistry: MeterRegistry) {
         // JVM stats
         results["jvm"] = jvmMemoryMetrics()
         // HTTP requests stats
-        results["http.server.requests"] = httpRequestsMetrics()
+        results[METRIC_SERVER] = httpRequestsMetrics()
         // Cache stats
         results["cache"] = cacheMetrics()
         // Service stats
@@ -69,7 +73,7 @@ public class EooMetricsEndpoint(private val meterRegistry: MeterRegistry) {
 
     internal fun garbageCollectorMetrics(): Map<String, Any> {
         val resultsGarbageCollector: MutableMap<String, Any> = HashMap()
-        val timers = Search.`in`(meterRegistry).name { it.contains("jvm.gc.pause") }.timers()
+        val timers = Search.`in`(meterRegistry).name { it.contains(METRIC_JVM) }.timers()
         timers.forEach { timer: Timer ->
             val key = timer.id.name
             val gcPauseResults = HashMap<String, Number>()
@@ -84,10 +88,10 @@ public class EooMetricsEndpoint(private val meterRegistry: MeterRegistry) {
             resultsGarbageCollector.putIfAbsent(key, gcPauseResults)
         }
 
-        var gauges = Search.`in`(meterRegistry).name { it.contains("jvm.gc") && !it.contains("jvm.gc.pause") }.gauges()
+        var gauges = Search.`in`(meterRegistry).name { it.contains("jvm.gc") && !it.contains(METRIC_JVM) }.gauges()
         gauges.forEach { gauge: Gauge -> resultsGarbageCollector[gauge.id.name] = gauge.value() }
         val counters = Search.`in`(meterRegistry).name {
-            it.contains("jvm.gc") && !it.contains("jvm.gc.pause")
+            it.contains("jvm.gc") && !it.contains(METRIC_JVM)
         }.counters()
         counters.forEach { counter: Counter -> resultsGarbageCollector[counter.id.name] = counter.count() }
         gauges = Search.`in`(meterRegistry).name { it.contains("jvm.classes.loaded") }.gauges()
@@ -131,7 +135,7 @@ public class EooMetricsEndpoint(private val meterRegistry: MeterRegistry) {
     internal fun serviceMetrics(): Map<String, Map<*, *>> {
         val crudOperation: Collection<String> = listOf("GET", "POST", "PUT", "DELETE")
         val uris: MutableSet<String> = HashSet()
-        val timers = meterRegistry.find("http.server.requests").timers()
+        val timers = meterRegistry.find(METRIC_SERVER).timers()
         timers.forEach { timer: Timer -> timer.id.getTag("uri")?.let { uris.add(it) } }
 
         val resultsHttpPerUri: MutableMap<String, Map<*, *>> = HashMap()
@@ -139,7 +143,7 @@ public class EooMetricsEndpoint(private val meterRegistry: MeterRegistry) {
             val resultsPerUri: MutableMap<String, Map<*, *>> = HashMap()
             crudOperation.forEach { operation: String ->
                 val resultsPerUriPerCrudOperation: MutableMap<String, Number> = HashMap()
-                val httpTimersStream = meterRegistry.find("http.server.requests")
+                val httpTimersStream = meterRegistry.find(METRIC_SERVER)
                     .tags("uri", uri, "method", operation).timers()
                 val count = httpTimersStream.map { it.count() }.sum()
                 if (count != 0L) {
@@ -222,7 +226,7 @@ public class EooMetricsEndpoint(private val meterRegistry: MeterRegistry) {
 
     internal fun httpRequestsMetrics(): Map<String, Map<*, *>> {
         val statusCode: MutableSet<String> = HashSet()
-        var timers = meterRegistry.find("http.server.requests").timers()
+        var timers = meterRegistry.find(METRIC_SERVER).timers()
 
         timers.forEach { timer -> timer.id.getTag("status")?.let { statusCode.add(it) } }
 
@@ -230,7 +234,7 @@ public class EooMetricsEndpoint(private val meterRegistry: MeterRegistry) {
         val httpResultsPerCode: MutableMap<String, Map<String, Number>> = HashMap()
         statusCode.forEach { code: String ->
             val resultsPerCode: MutableMap<String, Number> = HashMap()
-            val httpTimersStream = meterRegistry.find("http.server.requests").tag("status", code).timers()
+            val httpTimersStream = meterRegistry.find(METRIC_SERVER).tag("status", code).timers()
             val count = httpTimersStream.map { it.count() }.sum()
             val max = httpTimersStream.map { it.max(TimeUnit.MILLISECONDS) }.maxOrNull() ?: 0.0
             val totalTime = httpTimersStream.map { it.totalTime(TimeUnit.MILLISECONDS) }.sum()
@@ -240,7 +244,7 @@ public class EooMetricsEndpoint(private val meterRegistry: MeterRegistry) {
             httpResultsPerCode[code] = resultsPerCode
         }
         httpResults["percode"] = httpResultsPerCode
-        timers = meterRegistry.find("http.server.requests").timers()
+        timers = meterRegistry.find(METRIC_SERVER).timers()
         val countAllRequests = timers.map { it.count() }.sum()
         val httpResultsAll: MutableMap<String, Number> = HashMap()
         httpResultsAll["count"] = countAllRequests

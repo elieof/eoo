@@ -18,10 +18,10 @@ class AjaxAuthenticationFailureHandler : SimpleUrlAuthenticationFailureHandler()
 
     @Throws(IOException::class, ServletException::class)
     override fun onAuthenticationFailure(
-        request: HttpServletRequest, response: HttpServletResponse,
+        request: HttpServletRequest,
+        response: HttpServletResponse,
         exception: AuthenticationException
     ) {
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, UNAUTHORIZED_MESSAGE)
     }
 }
-

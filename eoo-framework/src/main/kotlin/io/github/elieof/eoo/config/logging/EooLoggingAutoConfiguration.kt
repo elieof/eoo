@@ -49,8 +49,6 @@ class EooLoggingAutoConfiguration(
 
         val loggingProperties = eooProperties.logging
 
-//        addContextListener(context, customFields, loggingProperties)
-
         if (loggingProperties.useJsonFormat) {
             addJsonConsoleAppender(context, customFields)
         }

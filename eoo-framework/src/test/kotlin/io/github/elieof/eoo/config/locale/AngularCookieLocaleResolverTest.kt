@@ -221,7 +221,7 @@ internal class AngularCookieLocaleResolverTest {
         assertThat(event.level).isEqualTo("TRACE")
         assertThat(event.message).isEqualTo(
             "Added cookie [" + CookieLocaleResolver.DEFAULT_COOKIE_NAME + "=" +
-                    resolver.quote(value) + "]"
+                resolver.quote(value) + "]"
         )
         assertThat(event.thrown).isNull()
     }
@@ -267,8 +267,8 @@ internal class AngularCookieLocaleResolverTest {
         assertThat(event.level).isEqualTo("TRACE")
         assertThat(event.message).isEqualTo(
             (
-                    "Parsed cookie value [$value] into locale '$locale' and time zone '${zone!!.id}'"
-                    )
+                "Parsed cookie value [$value] into locale '$locale' and time zone '${zone!!.id}'"
+                )
         )
         assertThat(event.thrown).isNull()
     }

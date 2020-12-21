@@ -1,3 +1,4 @@
+
 import java.io.FileInputStream
 import java.util.*
 
@@ -28,6 +29,8 @@ configure<JavaPluginConvention> {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
 }
+
+// val SourceSet.kotlin: SourceDirectorySet get() = this.withConvention(KotlinSourceSet::class) { kotlin }
 
 tasks.bootJar {
     enabled = false
@@ -78,6 +81,9 @@ tasks.test {
 
 tasks.jacocoTestReport {
 
+//    sourceDirectories.setFrom(sourceSets.main.get().kotlin.srcDirs)
+//    classDirectories.setFrom(sourceSets.main.get().kotlin.classesDirectory)
+
     reports {
         xml.isEnabled = true
     }
@@ -106,7 +112,14 @@ sonarProperties.forEach { (key, value) ->
         }
     }
 }
-
+val sonarToken: String? = project.findProperty("sonarToken") as String? ?: System.getenv("SONAR_TOKEN")
+sonarToken?.let {
+    sonarqube {
+        properties {
+            property("sonar.login", sonarToken)
+        }
+    }
+}
 tasks.dokkaJavadoc {
     outputDirectory.set(buildDir.resolve("$buildDir/dokka"))
 }
@@ -122,7 +135,6 @@ val sourcesJar by tasks.creating(Jar::class) {
     archiveClassifier.set("sources")
     from(sourceSets.main.get().allSource)
 }
-
 val projectName = name
 val projectDescription = description
 val repoUrl = "https://github.com/elieof/eoo"

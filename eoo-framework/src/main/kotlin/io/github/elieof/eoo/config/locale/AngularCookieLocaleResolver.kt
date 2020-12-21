@@ -60,7 +60,7 @@ public class AngularCookieLocaleResolver : CookieLocaleResolver() {
             locale = if ("-" != localePart) StringUtils.parseLocaleString(localePart.replace('-', '_')) else null
             log.trace(
                 "Parsed cookie value [${cookie.value}] into locale '$locale'" +
-                        if (timeZone != null) " and time zone '${timeZone.id}'" else ""
+                    if (timeZone != null) " and time zone '${timeZone.id}'" else ""
             )
         }
         request.setAttribute(LOCALE_REQUEST_ATTRIBUTE_NAME, locale ?: determineDefaultLocale(request))

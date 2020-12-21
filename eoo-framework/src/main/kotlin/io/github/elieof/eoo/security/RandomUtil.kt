@@ -3,7 +3,6 @@ package io.github.elieof.eoo.security
 import org.apache.commons.lang.RandomStringUtils
 import java.security.SecureRandom
 
-
 /**
  * Utility class for generating random Strings.
  */
@@ -15,7 +14,6 @@ object RandomUtil {
     init {
         SECURE_RANDOM.nextBytes(ByteArray(CAPACITY))
     }
-
 
     /**
      *
@@ -56,5 +54,4 @@ object RandomUtil {
     fun generateResetKey(): String {
         return generateRandomAlphanumericString()
     }
-
 }

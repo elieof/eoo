@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse
 /**
  * Spring Security success handler, specialized for Ajax requests.
  */
-class AjaxAuthenticationSuccessHandler: SimpleUrlAuthenticationSuccessHandler() {
+class AjaxAuthenticationSuccessHandler : SimpleUrlAuthenticationSuccessHandler() {
 
     @Throws(IOException::class, ServletException::class)
     override fun onAuthenticationSuccess(

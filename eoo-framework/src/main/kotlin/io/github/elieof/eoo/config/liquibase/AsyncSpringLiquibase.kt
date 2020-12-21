@@ -47,8 +47,6 @@ open class AsyncSpringLiquibase(
 
         /** Constant `SLOWNESS_MESSAGE="Warning, Liquibase took more than {} se"{trunked}`  */
         const val SLOWNESS_MESSAGE = "Warning, Liquibase took more than {} seconds to start up!"
-
-//        private val logger = LoggerFactory.getLogger(AsyncSpringLiquibase::class.java)
     }
 
     override fun afterPropertiesSet() {

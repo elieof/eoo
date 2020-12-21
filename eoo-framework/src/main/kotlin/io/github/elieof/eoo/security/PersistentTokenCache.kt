@@ -18,7 +18,6 @@
  */
 package io.github.elieof.eoo.security
 
-
 /**
  * Simple time-limited cache for login tokens, necessary to avoid concurrent
  * requests invalidating one another. It uses a [kotlin.collections.LinkedHashMap]

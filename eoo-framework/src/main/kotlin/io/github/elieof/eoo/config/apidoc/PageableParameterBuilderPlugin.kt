@@ -33,7 +33,6 @@ public open class PageableParameterBuilderPlugin(resolver: TypeResolver) : Opera
         /** Constant `SORT_DESCRIPTION="Sorting criteria in the format: propert"{trunked}`  */
         public const val SORT_DESCRIPTION: String = """Sorting criteria in the format: property(,asc|desc).
             | Default sort order is ascending. Multiple sort criteria are supported."""
-
     }
 
     private val pageableType: ResolvedType = resolver.resolve(Pageable::class.java)

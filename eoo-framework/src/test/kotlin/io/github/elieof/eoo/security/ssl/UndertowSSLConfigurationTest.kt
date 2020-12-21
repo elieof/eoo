@@ -12,13 +12,13 @@ class UndertowSSLConfigurationTest {
 
     @Test
     fun testUndertowSSLConfigurationOK() {
-        //Prepare
+        // Prepare
         val undertowServletWebServerFactory = UndertowServletWebServerFactory()
 
-        //Execute
+        // Execute
         UndertowSSLConfiguration(undertowServletWebServerFactory)
 
-        //Verify
+        // Verify
         val builder = Undertow.builder()
         undertowServletWebServerFactory.builderCustomizers.forEach {
             it.customize(builder)
@@ -27,5 +27,4 @@ class UndertowSSLConfigurationTest {
         assertThat(undertowServletWebServerFactory).isNotNull
         assertThat(serverOptions.map.get(UndertowOptions.SSL_USER_CIPHER_SUITES_ORDER)).isTrue
     }
-
 }

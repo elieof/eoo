@@ -60,5 +60,4 @@ class PersistentTokenCacheTest {
         cache.purge()
         assertThat(cache.size()).isEqualTo(0)
     }
-
 }

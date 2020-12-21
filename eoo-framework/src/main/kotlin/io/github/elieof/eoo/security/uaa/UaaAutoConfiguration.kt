@@ -1,6 +1,5 @@
 package io.github.elieof.eoo.security.uaa
 
-
 import io.github.elieof.eoo.config.EooProperties
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
@@ -8,7 +7,6 @@ import org.springframework.cloud.client.loadbalancer.LoadBalancerClient
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails
-
 
 /**
  *
@@ -41,4 +39,3 @@ class UaaAutoConfiguration(val eooProperties: EooProperties) {
         return loadBalancedResourceDetails
     }
 }
-

@@ -11,12 +11,14 @@ import javax.servlet.http.HttpServletResponse
 /**
  * Spring Security logout handler, specialized for Ajax requests.
  */
-class AjaxLogoutSuccessHandler : AbstractAuthenticationTargetUrlRequestHandler(),
+class AjaxLogoutSuccessHandler :
+    AbstractAuthenticationTargetUrlRequestHandler(),
     LogoutSuccessHandler {
     /** {@inheritDoc}  */
     @Throws(IOException::class, ServletException::class)
     override fun onLogoutSuccess(
-        request: HttpServletRequest, response: HttpServletResponse,
+        request: HttpServletRequest,
+        response: HttpServletResponse,
         authentication: Authentication
     ) {
         response.status = HttpServletResponse.SC_OK

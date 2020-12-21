@@ -2,16 +2,13 @@ package io.github.elieof.eoo.config.logging
 
 import ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME
 import ch.qos.logback.classic.LoggerContext
-import ch.qos.logback.classic.boolex.OnMarkerEvaluator
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder
 import ch.qos.logback.core.ConsoleAppender
 import ch.qos.logback.core.encoder.LayoutWrappingEncoder
-import ch.qos.logback.core.filter.EvaluatorFilter
 import ch.qos.logback.core.rolling.FixedWindowRollingPolicy
 import ch.qos.logback.core.rolling.RollingFileAppender
 import ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy
-import ch.qos.logback.core.spi.FilterReply
 import ch.qos.logback.core.util.FileSize
 import io.github.elieof.eoo.config.EooDefaults
 import io.github.elieof.eoo.config.EooProperties
@@ -199,5 +196,4 @@ internal class LoggingUtilsTest {
         logger.detachAppender(ASYNC_LOGSTASH_APPENDER_NAME)
         context.removeListener(loggerContextListener)
     }
-
 }
