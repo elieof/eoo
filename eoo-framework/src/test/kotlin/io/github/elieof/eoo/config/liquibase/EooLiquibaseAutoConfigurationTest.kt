@@ -1,6 +1,7 @@
 package io.github.elieof.eoo.config.liquibase
 
 import com.zaxxer.hikari.HikariDataSource
+import io.github.elieof.eoo.config.EooProfiles
 import io.github.elieof.eoo.test.LogbackRecorder
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.InstanceOfAssertFactories
@@ -17,7 +18,9 @@ import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties
 import org.springframework.core.env.ConfigurableEnvironment
 import org.springframework.core.task.SimpleAsyncTaskExecutor
 import org.springframework.mock.env.MockEnvironment
+import java.util.concurrent.TimeUnit
 import javax.sql.DataSource
+import kotlin.concurrent.withLock
 
 internal class EooLiquibaseAutoConfigurationTest {
 
@@ -87,4 +90,31 @@ internal class EooLiquibaseAutoConfigurationTest {
         Assertions.assertThat(event.message).isEqualTo(EooLiquibaseAutoConfiguration.STARTING_MESSAGE)
         Assertions.assertThat(event.thrown).isNull()
     }
+
+
+    @Test
+    fun testProfileNoLiquibase() {
+        environment.setActiveProfiles(EooProfiles.SPRING_PROFILE_NO_LIQUIBASE)
+        val liquibaseProperties = LiquibaseProperties()
+        liquibaseProperties.url = URL_LIQUIBASE
+        liquibaseProperties.user = USER_NAME
+        val dataSourceProperties = DataSourceProperties()
+        dataSourceProperties.password = PASSWORD
+
+        config.liquibase(
+            executor,
+            dataSource,
+            liquibaseProperties,
+            dataSource,
+            dataSourceProperties
+        )
+
+        val events = recorder.play()
+        Assertions.assertThat(events).hasSize(1)
+        val event: LogbackRecorder.Event = events[0]
+        Assertions.assertThat(event.level).isEqualTo("DEBUG")
+        Assertions.assertThat(event.message).isEqualTo(EooLiquibaseAutoConfiguration.DISABLED_MESSAGE)
+        Assertions.assertThat(event.thrown).isNull()
+    }
+
 }

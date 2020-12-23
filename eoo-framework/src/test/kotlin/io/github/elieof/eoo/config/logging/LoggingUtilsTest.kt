@@ -57,6 +57,23 @@ internal class LoggingUtilsTest {
     }
 
     @Test
+    fun addFileAppenderNoFileProperty() {
+        context = org.slf4j.LoggerFactory.getILoggerFactory() as LoggerContext
+        val fileProperties = EooProperties.Logging.AppFile()
+        LoggingUtils.addFileAppender(context, fileProperties)
+
+        val logger = context.getLogger(ROOT_LOGGER_NAME)
+        assertThat(logger).isNotNull
+
+        val appender = logger.getAppender(FILE_APPENDER_NAME)
+        assertThat(appender).isNotNull
+            .asInstanceOf(type(RollingFileAppender::class.java))
+            .hasFieldOrPropertyWithValue(
+                "fileName",
+                System.getProperty("java.io.tmpdir") + "/.log"  + "/" + fileProperties.prefix + ".log"
+            )
+    }
+    @Test
     fun addFileAppender() {
         context = org.slf4j.LoggerFactory.getILoggerFactory() as LoggerContext
         val fileProperties = loggingProperties.file
