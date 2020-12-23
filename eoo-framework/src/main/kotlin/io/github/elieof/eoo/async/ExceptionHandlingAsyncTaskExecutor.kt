@@ -69,16 +69,14 @@ public open class ExceptionHandlingAsyncTaskExecutor(
     @Throws(Exception::class)
     override fun destroy() {
         if (executor is DisposableBean) {
-            val bean = executor as DisposableBean
-            bean.destroy()
+            executor.destroy()
         }
     }
 
     @Throws(Exception::class)
     override fun afterPropertiesSet() {
         if (executor is InitializingBean) {
-            val bean = executor as InitializingBean
-            bean.afterPropertiesSet()
+            executor.afterPropertiesSet()
         }
     }
 }

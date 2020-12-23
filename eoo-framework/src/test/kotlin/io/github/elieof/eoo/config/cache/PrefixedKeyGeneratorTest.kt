@@ -36,13 +36,19 @@ class PrefixedKeyGeneratorTest {
     fun generatePrefixFromBuildTime() {
         val buildProperties = Properties()
         buildProperties["time"] = "1583955265"
-        val prefixedKeyGenerator = PrefixedKeyGenerator(null, BuildProperties(buildProperties))
+        val prefixedKeyGenerator = PrefixedKeyGenerator(GitProperties(Properties()), BuildProperties(buildProperties))
         assertThat(prefixedKeyGenerator.prefix).isEqualTo("1970-01-19T07:59:15.265Z")
     }
 
     @Test
     fun generatesRandomPrefix() {
         val prefixedKeyGenerator = PrefixedKeyGenerator(null, null)
+        assertThat(prefixedKeyGenerator.prefix.length).isEqualTo(12)
+    }
+
+    @Test
+    fun generatesRandomPrefixWhenNoVersion() {
+        val prefixedKeyGenerator = PrefixedKeyGenerator(null, BuildProperties(Properties()))
         assertThat(prefixedKeyGenerator.prefix.length).isEqualTo(12)
     }
 

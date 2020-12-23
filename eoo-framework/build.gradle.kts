@@ -30,8 +30,6 @@ configure<JavaPluginConvention> {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
-// val SourceSet.kotlin: SourceDirectorySet get() = this.withConvention(KotlinSourceSet::class) { kotlin }
-
 tasks.bootJar {
     enabled = false
 }
@@ -81,11 +79,19 @@ tasks.test {
 
 tasks.jacocoTestReport {
 
-//    sourceDirectories.setFrom(sourceSets.main.get().kotlin.srcDirs)
-//    classDirectories.setFrom(sourceSets.main.get().kotlin.classesDirectory)
+    classDirectories.setFrom(
+        files(
+            classDirectories.files.map {
+                fileTree(it) {
+                    exclude("**/*\$logger\$*.class")
+                }
+            }
+        )
+    )
 
     reports {
         xml.isEnabled = true
+        html.isEnabled = true
     }
 }
 
