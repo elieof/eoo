@@ -27,6 +27,8 @@ internal class EooPropertiesTest {
     @Test
     fun testAsyncCorePoolSize() {
         val obj = properties.async
+        assertThat(EooDefaults).isNotNull
+        assertThat(EooDefaults.Async).isNotNull
         val value = EooDefaults.Async.corePoolSize
         assertThat(obj.corePoolSize).isEqualTo(value)
     }
@@ -48,6 +50,8 @@ internal class EooPropertiesTest {
     @Test
     fun testHttpCacheTimeToLiveInDays() {
         val obj = properties.http.cache
+        assertThat(EooDefaults.Http).isNotNull
+        assertThat(EooDefaults.Http.Cache).isNotNull
         val value = EooDefaults.Http.Cache.timeToLiveInDays
         assertThat(obj.timeToLiveInDays).isEqualTo(value)
     }
@@ -55,6 +59,7 @@ internal class EooPropertiesTest {
     @Test
     fun testLoggingUseJsonFormat() {
         val obj = properties.logging
+        assertThat(EooDefaults.Logging).isNotNull
         val value = EooDefaults.Logging.useJsonFormat
         assertThat(obj.useJsonFormat).isEqualTo(value)
     }
@@ -62,6 +67,7 @@ internal class EooPropertiesTest {
     @Test
     fun testLoggingLogstashEnabled() {
         val obj = properties.logging.logstash
+        assertThat(EooDefaults.Logging.Logstash).isNotNull
 
         val value = EooDefaults.Logging.Logstash.enabled
         assertThat(obj.enabled).isEqualTo(value)
@@ -91,8 +97,30 @@ internal class EooPropertiesTest {
     @Test
     fun testLoggingFileEnabled() {
         val obj = properties.logging.file
+        assertThat(EooDefaults.Logging.File).isNotNull
         val value = EooDefaults.Logging.File.enabled
         assertThat(obj.enabled).isEqualTo(value)
+    }
+
+    @Test
+    fun testFilPrefix() {
+        val obj = EooProperties.Logging.File()
+        val value = EooDefaults.Logging.File.prefix
+        assertThat(obj.prefix).isEqualTo(value)
+    }
+
+    @Test
+    fun testFileEnabled() {
+        val obj = EooProperties.Logging.File()
+        val value = EooDefaults.Logging.File.enabled
+        assertThat(obj.enabled).isEqualTo(value)
+    }
+
+    @Test
+    fun testFileDir() {
+        val obj = EooProperties.Logging.File()
+        val value = EooDefaults.Logging.File.dir
+        assertThat(obj.dir).isEqualTo(value)
     }
 
     @Test
@@ -161,6 +189,8 @@ internal class EooPropertiesTest {
     @Test
     fun testCacheHazelcastTimeToLiveSeconds() {
         val obj = properties.cache.hazelcast
+        assertThat(EooDefaults.Cache).isNotNull
+        assertThat(EooDefaults.Cache.Hazelcast).isNotNull
         val value = EooDefaults.Cache.Hazelcast.timeToLiveSeconds
         assertThat(obj.timeToLiveSeconds).isEqualTo(value)
     }
@@ -175,6 +205,7 @@ internal class EooPropertiesTest {
     @Test
     fun testCacheCaffeineTimeToLiveSeconds() {
         val obj = properties.cache.caffeine
+        assertThat(EooDefaults.Cache.Caffeine).isNotNull
         val value = EooDefaults.Cache.Caffeine.timeToLiveSeconds
         assertThat(obj.timeToLiveSeconds).isEqualTo(value)
     }
@@ -189,6 +220,7 @@ internal class EooPropertiesTest {
     @Test
     fun testCacheEhcacheTimeToLiveSeconds() {
         val obj = properties.cache.ehcache
+        assertThat(EooDefaults.Cache.Ehcache).isNotNull
         val value = EooDefaults.Cache.Ehcache.timeToLiveSeconds
         assertThat(obj.timeToLiveSeconds).isEqualTo(value)
     }
@@ -203,6 +235,7 @@ internal class EooPropertiesTest {
     @Test
     fun testCacheInfinispanConfigFile() {
         val obj = properties.cache.infinispan
+        assertThat(EooDefaults.Cache.Infinispan).isNotNull
         val value = EooDefaults.Cache.Infinispan.configFile
         assertThat(obj.configFile).isEqualTo(value)
     }
@@ -217,6 +250,7 @@ internal class EooPropertiesTest {
     @Test
     fun testCacheInfinispanLocalTimeToLiveSeconds() {
         val obj = properties.cache.infinispan.local
+        assertThat(EooDefaults.Cache.Infinispan.Local).isNotNull
         val value = EooDefaults.Cache.Infinispan.Local.timeToLiveSeconds
         assertThat(obj.timeToLiveSeconds).isEqualTo(value)
     }
@@ -231,6 +265,7 @@ internal class EooPropertiesTest {
     @Test
     fun testCacheInfinispanDistributedTimeToLiveSeconds() {
         val obj = properties.cache.infinispan.distributed
+        assertThat(EooDefaults.Cache.Infinispan.Distributed).isNotNull
         val value = EooDefaults.Cache.Infinispan.Distributed.timeToLiveSeconds
         assertThat(obj.timeToLiveSeconds).isEqualTo(value)
     }
@@ -252,6 +287,7 @@ internal class EooPropertiesTest {
     @Test
     fun testCacheInfinispanReplicatedTimeToLiveSeconds() {
         val obj = properties.cache.infinispan.replicated
+        assertThat(EooDefaults.Cache.Infinispan.Replicated).isNotNull
         val value = EooDefaults.Cache.Infinispan.Replicated.timeToLiveSeconds
         assertThat(obj.timeToLiveSeconds).isEqualTo(value)
     }
@@ -266,6 +302,7 @@ internal class EooPropertiesTest {
     @Test
     fun testCacheMemCachedEnabled() {
         val obj = properties.cache.memCached
+        assertThat(EooDefaults.Cache.Memcached).isNotNull
         val value = EooDefaults.Cache.Memcached.enabled
         assertThat(obj.enabled).isEqualTo(value)
     }
@@ -294,6 +331,7 @@ internal class EooPropertiesTest {
     @Test
     fun testCacheMemCachedAuthenticationEnabled() {
         val obj = properties.cache.memCached.authentication
+        assertThat(EooDefaults.Cache.Memcached.Authentication).isNotNull
         val value = EooDefaults.Cache.Memcached.Authentication.enabled
         assertThat(obj.enabled).isEqualTo(value)
     }
@@ -315,6 +353,7 @@ internal class EooPropertiesTest {
     @Test
     fun testCacheRedisServer() {
         val obj = properties.cache.redis
+        assertThat(EooDefaults.Cache.Redis).isNotNull
         val value = EooDefaults.Cache.Redis.server
         assertThat(obj.server).isEqualTo(value)
     }
@@ -364,6 +403,7 @@ internal class EooPropertiesTest {
     @Test
     fun testMailEnabled() {
         val obj = properties.mail
+        assertThat(EooDefaults.Mail).isNotNull
         val value = EooDefaults.Mail.enabled
         assertThat(obj.enabled).isEqualTo(value)
     }
@@ -385,6 +425,8 @@ internal class EooPropertiesTest {
     @Test
     fun testSecurityClientAuthorizationAccessTokenUri() {
         val obj = properties.security.clientAuthorization
+        assertThat(EooDefaults.Security).isNotNull
+        assertThat(EooDefaults.Security.ClientAuthorization).isNotNull
         val value = EooDefaults.Security.ClientAuthorization.accessTokenUri
         assertThat(obj.accessTokenUri).isEqualTo(value)
     }
@@ -413,6 +455,8 @@ internal class EooPropertiesTest {
     @Test
     fun testSecurityAuthenticationJwtSecret() {
         val obj = properties.security.authentication.jwt
+        assertThat(EooDefaults.Security.Authentication).isNotNull
+        assertThat(EooDefaults.Security.Authentication.Jwt).isNotNull
         val value = EooDefaults.Security.Authentication.Jwt.secret
         assertThat(obj.secret).isEqualTo(value)
     }
@@ -441,6 +485,7 @@ internal class EooPropertiesTest {
     @Test
     fun testSecurityRememberMeKey() {
         val obj = properties.security.rememberMe
+        assertThat(EooDefaults.Security.RememberMe).isNotNull
         val value = EooDefaults.Security.RememberMe.key
         assertThat(obj.key).isEqualTo(value)
     }
@@ -448,6 +493,7 @@ internal class EooPropertiesTest {
     @Test
     fun testSecurityOauth2() {
         val obj = properties.security.oauth2
+        assertThat(EooDefaults.Security.Oauth2).isNotNull
         val value = EooDefaults.Security.Oauth2.audience
         assertThat(obj.audience).isEqualTo(value)
     }
@@ -455,6 +501,7 @@ internal class EooPropertiesTest {
     @Test
     fun testApiDocsTitle() {
         val obj = properties.apiDocs
+        assertThat(EooDefaults.ApiDocs).isNotNull
         val value = EooDefaults.ApiDocs.title
         assertThat(obj.title).isEqualTo(value)
     }
@@ -537,8 +584,31 @@ internal class EooPropertiesTest {
     }
 
     @Test
+    fun testServerUrl() {
+        val obj = EooProperties.ApiDocs.Server()
+        val value = EooDefaults.ApiDocs.Server.url
+        assertThat(obj.url).isEqualTo(value)
+    }
+
+
+    @Test
+    fun testServerDescription() {
+        val obj = EooProperties.ApiDocs.Server()
+        val value = EooDefaults.ApiDocs.Server.description
+        assertThat(obj.description).isEqualTo(value)
+    }
+
+    @Test
+    fun testServerName() {
+        val obj = EooProperties.ApiDocs.Server()
+        val value = EooDefaults.ApiDocs.Server.name
+        assertThat(obj.name).isEqualTo(value)
+    }
+
+    @Test
     fun testApiDocsServers() {
         val obj = properties.apiDocs
+        assertThat(EooDefaults.ApiDocs.Server).isNotNull
         val value = EooDefaults.ApiDocs.servers
         assertThat(obj.servers).isEqualTo(value)
     }
@@ -553,6 +623,7 @@ internal class EooPropertiesTest {
     @Test
     fun testSocialRedirectAfterSignIng() {
         val obj = properties.social
+        assertThat(EooDefaults.Social).isNotNull
         val value = EooDefaults.Social.redirectAfterSignIn
         assertThat(obj.redirectAfterSignIn).isEqualTo(value)
     }
@@ -560,6 +631,8 @@ internal class EooPropertiesTest {
     @Test
     fun testGatewayRateLimitingEnabled() {
         val obj = properties.gateway.rateLimiting
+        assertThat(EooDefaults.Gateway).isNotNull
+        assertThat(EooDefaults.Gateway.RateLimiting).isNotNull
         val value = EooDefaults.Gateway.RateLimiting.enabled
         assertThat(obj.enabled).isEqualTo(value)
     }
@@ -588,6 +661,7 @@ internal class EooPropertiesTest {
     @Test
     fun testRegistryPassword() {
         val obj = properties.registry
+        assertThat(EooDefaults.Registry).isNotNull
         val value = EooDefaults.Registry.password
         assertThat(obj.password).isEqualTo(value)
     }
@@ -595,6 +669,7 @@ internal class EooPropertiesTest {
     @Test
     fun testClientAppName() {
         val obj = properties.clientApp
+        assertThat(EooDefaults.ClientApp).isNotNull
         val value = EooDefaults.ClientApp.name
         assertThat(obj.name).isEqualTo(value)
     }
@@ -602,6 +677,7 @@ internal class EooPropertiesTest {
     @Test
     fun testAuditEventsRetentionPeriod() {
         val obj = properties.auditEvents
+        assertThat(EooDefaults.AuditEvents).isNotNull
         val value = EooDefaults.AuditEvents.retentionPeriod
         assertThat(obj.retentionPeriod).isEqualTo(value)
     }

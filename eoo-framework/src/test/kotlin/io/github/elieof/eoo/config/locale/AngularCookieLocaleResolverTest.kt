@@ -2,19 +2,18 @@ package io.github.elieof.eoo.config.locale
 
 import io.github.elieof.eoo.test.LogbackRecorder
 import io.github.elieof.eoo.test.LogbackRecorder.Event
-import io.mockk.MockKAnnotations
-import io.mockk.every
-import io.mockk.slot
-import io.mockk.spyk
-import io.mockk.verify
+import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.context.i18n.TimeZoneAwareLocaleContext
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.mock.web.MockHttpServletResponse
 import org.springframework.web.servlet.i18n.CookieLocaleResolver
+import org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE_REQUEST_ATTRIBUTE_NAME
+import org.springframework.web.servlet.i18n.CookieLocaleResolver.TIME_ZONE_REQUEST_ATTRIBUTE_NAME
 import java.time.ZoneId
 import java.util.*
 import javax.servlet.http.Cookie
@@ -72,14 +71,31 @@ internal class AngularCookieLocaleResolverTest {
     }
 
     @Test
+    fun testDefaultsWhenNoCookieName() {
+        // given
+        resolver.cookieName = null
+
+        // when
+        val context = resolver.resolveLocaleContext(request)
+
+        // then
+        assertThat(context).isNotNull
+        assertThat(context).isInstanceOf(TimeZoneAwareLocaleContext::class.java)
+        assertThat((context as TimeZoneAwareLocaleContext).locale).isEqualTo(LOCALE_DEFAULT)
+        assertThat(context.timeZone).isEqualTo(TIMEZONE_DEFAULT)
+        val events = recorder.play()
+        assertThat(events).isEmpty()
+    }
+
+    @Test
     fun testPresets() {
-        every { request.getAttribute(CookieLocaleResolver.LOCALE_REQUEST_ATTRIBUTE_NAME) } returns LOCALE_DEFAULT
-        every { request.getAttribute(CookieLocaleResolver.TIME_ZONE_REQUEST_ATTRIBUTE_NAME) } returns TIMEZONE_DEFAULT
+        every { request.getAttribute(LOCALE_REQUEST_ATTRIBUTE_NAME) } returns LOCALE_DEFAULT
+        every { request.getAttribute(TIME_ZONE_REQUEST_ATTRIBUTE_NAME) } returns TIMEZONE_DEFAULT
 
         val context = resolver.resolveLocaleContext(request)
 
         verify {
-            request.getAttribute(CookieLocaleResolver.LOCALE_REQUEST_ATTRIBUTE_NAME)
+            request.getAttribute(LOCALE_REQUEST_ATTRIBUTE_NAME)
         }
 
         assertThat(context).isNotNull
@@ -106,6 +122,20 @@ internal class AngularCookieLocaleResolverTest {
         assertThat(locale).isEqualTo(LOCALE_CUSTOM)
         val events = recorder.play()
         assertThat(events).isEmpty()
+    }
+
+    @Test
+    fun testLocaleNPE() {
+        every { request.getAttribute(LOCALE_REQUEST_ATTRIBUTE_NAME) } returns null
+        every { request.getAttribute(TIME_ZONE_REQUEST_ATTRIBUTE_NAME) } returns null
+
+        assertThrows<NullPointerException> { resolver.resolveLocale(request) }
+
+        val context = resolver.resolveLocaleContext(request) as TimeZoneAwareLocaleContext
+
+        assertThat(context).isNotNull
+        assertThrows<NullPointerException> { context.locale }
+        assertThrows<NullPointerException> { context.timeZone }
     }
 
     @Test

@@ -84,6 +84,7 @@ tasks.jacocoTestReport {
             classDirectories.files.map {
                 fileTree(it) {
                     exclude("**/*\$logger\$*.class")
+                    exclude("**/*\$log\$*.class")
                 }
             }
         )

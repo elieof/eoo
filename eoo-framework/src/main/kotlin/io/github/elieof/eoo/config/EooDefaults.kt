@@ -41,17 +41,6 @@ object EooDefaults {
         }
     }
 
-    object Metrics {
-        object Jmx {
-            const val enabled = false
-        }
-
-        object Logs {
-            const val enabled = false
-            const val frequencyReport: Long = 60
-        }
-    }
-
     object Cache {
         object Hazelcast {
             const val timeToLiveSeconds: Long = 3600
@@ -180,10 +169,6 @@ object EooDefaults {
             const val limit = 100000L
             const val durationInSeconds = 3600
         }
-    }
-
-    object Ribbon {
-        val displayOnActiveProfiles = emptyArray<String>()
     }
 
     object Registry {

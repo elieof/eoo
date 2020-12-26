@@ -24,7 +24,7 @@ public class PrefixedKeyGenerator(gitProperties: GitProperties?, buildProperties
 
     public val prefix: String = generatePrefix(gitProperties, buildProperties)
 
-    override fun generate(target: Any, method: Method, vararg params: Any): Any {
+    override fun generate(target: Any, method: Method, vararg params: Any): PrefixedSimpleKey {
         return PrefixedSimpleKey(prefix, method.name, listOf(*params))
     }
 

@@ -9,7 +9,7 @@ import org.springframework.boot.SpringApplication
  * If the value is not available in `application.yml` then `dev`  profile will be used as default.
  */
 public object DefaultProfileUtil {
-    private const val SPRING_PROFILE_DEFAULT = "spring.profiles.default"
+    internal const val SPRING_PROFILE_DEFAULT = "spring.profiles.default"
 
     /**
      * Set a default to use when no profile is configured.

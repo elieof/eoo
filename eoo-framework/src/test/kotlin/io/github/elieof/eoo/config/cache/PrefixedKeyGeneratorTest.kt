@@ -58,8 +58,10 @@ class PrefixedKeyGeneratorTest {
         gitProperties["commit.id"] = "1234567"
         val prefixedKeyGenerator = PrefixedKeyGenerator(GitProperties(gitProperties), null)
         val method = String::class.java.getMethod("equalsIgnoreCase", String::class.java)
-        assertThat(prefixedKeyGenerator.generate("target", method, "test")).isEqualTo(
-            PrefixedSimpleKey("1234567", "equalsIgnoreCase", listOf("test"))
-        )
+        val simpleKey = prefixedKeyGenerator.generate("target", method, "test")
+        assertThat(simpleKey).isNotNull
+        assertThat(simpleKey.prefix).isEqualTo("1234567")
+        assertThat(simpleKey.methodName).isEqualTo("equalsIgnoreCase")
+        assertThat(simpleKey.params).isEqualTo(listOf("test"))
     }
 }
