@@ -41,23 +41,36 @@ class PersistentTokenCacheTest {
 
     @Test
     fun testExpires() {
-        val cache: PersistentTokenCache<String> = PersistentTokenCache(1L)
+        val cache: PersistentTokenCache<String> = PersistentTokenCache(9L)
         cache.put("key", "val")
-        GlobalScope.launch { // launch a new coroutine in background and continue
+        GlobalScope.launch {
             delay(10L)
             assertThat(cache["key"]).isNull()
         }
     }
 
     @Test
-    fun testPurge() {
+    fun testPurgeClear() {
         val cache: PersistentTokenCache<String> = PersistentTokenCache(1L)
         cache.put("key", "val")
-        GlobalScope.launch { // launch a new coroutine in background and continue
+        GlobalScope.launch {
             delay(10L)
+            assertThat(cache.size()).isEqualTo(1)
+            cache.purge()
+            assertThat(cache.size()).isEqualTo(0)
         }
-        assertThat(cache.size()).isEqualTo(1)
-        cache.purge()
-        assertThat(cache.size()).isEqualTo(0)
+    }
+
+    @Test
+    fun testPurgeExpired() {
+        val cache: PersistentTokenCache<String> = PersistentTokenCache(5L)
+        cache.put("key", "val")
+        GlobalScope.launch {
+            delay(10L)
+            assertThat(cache.size()).isEqualTo(1)
+            cache.put("key2", "val2")
+            cache.purge()
+            assertThat(cache.size()).isEqualTo(1)
+        }
     }
 }

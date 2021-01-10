@@ -103,5 +103,5 @@ class PersistentTokenCache<T>(expireMillis: Long) {
         }
     }
 
-    private inner class Value(val token: T, var expire: Long)
+    private inner class Value(val token: T, val expire: Long)
 }

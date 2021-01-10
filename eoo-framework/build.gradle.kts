@@ -221,7 +221,7 @@ dependencies {
 //    implementation(platform(Eoo.Deps.Spring.Boot.dependencies))
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
+    implementation(Eoo.Deps.coroutines)
 
     kapt(Eoo.Deps.Spring.Boot.configurationProcessor)
 //    kapt("org.springframework.boot:spring-boot-configuration-processor")

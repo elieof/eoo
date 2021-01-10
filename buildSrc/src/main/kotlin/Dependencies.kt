@@ -2,6 +2,7 @@
 
 object Eoo {
     const val kotlinVersion = "1.4.21"
+    const val coroutinesVersion = "1.4.2"
     const val gradleVersion = "6.7.1"
 
     const val springBootVersion = "2.3.7.RELEASE"
@@ -78,6 +79,7 @@ object Eoo {
         const val bucket4jCache = "com.github.vladimir-bukhtoyarov:bucket4j-jcache:$bucket4jVersion"
         const val cassandraUnitSpring = "org.cassandraunit:cassandra-unit-spring:$cassandraUnitVersion"
         const val commonsIo = "commons-io:commons-io:$commonsIoVersion"
+        const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
         const val couchmove = "com.github.differentway:couchmove:$couchmoveVersion"
         const val cucumberJava = "io.cucumber:cucumber-java:$cucumberJvmVersion"
         const val cucumberJunit = "io.cucumber:cucumber-junit:$cucumberJvmVersion"
