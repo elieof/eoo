@@ -10,15 +10,15 @@ object Eoo {
 
     const val ktlintVersion = "0.40.0"
     const val ktlintGVersion = "9.4.0"
-    const val detektVersion = "1.15.0-RC1"
+    const val detektVersion = "1.15.0"
     const val sonarqubeVersion = "3.0"
     const val nohttpVersion = "0.0.5.RELEASE"
     const val dokkaVersion = "1.4.20"
 
-    const val awsJavaVersion = "1.11.922"
+    const val awsJavaVersion = "1.11.934"
     const val azureSpringCloudClientVersion = "2.3.0"
     const val azureSpringBootVersion = "2.6.2"
-    const val bucket4jVersion = "4.10.0"
+    const val bucket4jVersion = "6.0.0"
     const val cassandraUnitVersion = "4.3.1.0"
     const val couchmoveVersion = "3.1"
     const val cucumberJvmVersion = "6.9.1"
@@ -29,15 +29,15 @@ object Eoo {
      * [springBoot](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/2.2.3.RELEASE)
      */
     const val deFlapDoodleVersion = "2.2.0"
-    const val hazelcastVersion = "4.1"
-    const val hazelcastHibernate53Version = "2.1.1"
+    const val hazelcastVersion = "4.1.1"
+    const val hazelcastHibernate53Version = "2.2.0"
     const val hibernateVersion = "5.4.23.Final"
     const val infinispanVersion = "10.1.8.Final"
     const val infinispanSpringBootVersion = "2.2.4.Final"
     const val kotlinLoggingVersion = "2.0.3"
     const val jjwtVersion = "0.11.2"
     const val liquibaseMssqlVersion = "1.6.4"
-    const val logstashLogbackEncoderVersion = "6.5"
+    const val logstashLogbackEncoderVersion = "6.6"
     const val lz4Version = "1.7.1"
     const val logbookVersion = "2.1.4"
     const val mapstructVersion = "1.4.1.Final"
@@ -50,22 +50,21 @@ object Eoo {
     const val mssqlJdbcVersion = "8.4.1.jre8"
     const val mysqlVersion = "8.0.22"
     const val neo4jVersion = "0.0.13"
-    const val oracleVersion = "19.8.0.0"
+    const val oracleVersion = "19.9.0.0"
     const val problemSpringVersion = "0.26.2"
     const val prometheusVersion = "0.9.0"
-    const val redissonVersion = "3.14.0"
+    const val redissonVersion = "3.14.1"
     const val reflectionsVersion = "0.9.11"
     const val springDataReleaseTrainVersion = "Moore-SR7"
     const val springCloudVersion = "Hoxton.SR9"
     const val springCloudNetflixVersion = "2.2.3.RELEASE"
 
-    //    const val springDataJestVersion = "3.3.1.RELEASE"
     const val springDataNeo4jVersion = "1.1.1"
     const val springSecurityJwtVersion = "1.1.1.RELEASE"
     const val springSecurityOauthVersion = "2.5.0.RELEASE"
     const val springfoxVersion = "3.0.0"
     const val testcontainersVersion = "1.15.1"
-    const val xmemcachedVersion = "2.4.6"
+    const val xmemcachedVersion = "2.4.7"
     const val xmemcachedProviderVersion = "4.1.3"
 
     object Deps {
@@ -80,6 +79,7 @@ object Eoo {
         const val cassandraUnitSpring = "org.cassandraunit:cassandra-unit-spring:$cassandraUnitVersion"
         const val commonsIo = "commons-io:commons-io:$commonsIoVersion"
         const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+        const val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
         const val couchmove = "com.github.differentway:couchmove:$couchmoveVersion"
         const val cucumberJava = "io.cucumber:cucumber-java:$cucumberJvmVersion"
         const val cucumberJunit = "io.cucumber:cucumber-junit:$cucumberJvmVersion"
@@ -181,7 +181,6 @@ object Eoo {
                         const val couchbaseReactive = "$prefix-data-couchbase-reactive:$springBootVersion"
                         const val elasticsearch = "$prefix-data-elasticsearch:$springBootVersion"
 
-                        //                        const val jest = "com.github.vanroy:spring-boot-starter-data-jest:$springDataJestVersion"
                         const val jpa = "$prefix-data-jpa:$springBootVersion"
                         const val ldap = "$prefix-data-ldap:$springBootVersion"
                         const val mongodb = "$prefix-data-mongodb:$springBootVersion"
@@ -206,7 +205,6 @@ object Eoo {
                     object Jta {
                         const val atomikos = "$prefix-jta-atomikos:$springBootVersion"
                         const val bitronix = "$prefix-jta-bitronix:$springBootVersion"
-//                    const val narayana = "$prefix-jta-narayana:$springBootVersion"
                     }
 
                     const val log4j2 = "$prefix-log4j2:$springBootVersion"

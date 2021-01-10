@@ -18,13 +18,15 @@
  */
 package io.github.elieof.eoo.security
 
+import java.time.Clock
+
 /**
  * Simple time-limited cache for login tokens, necessary to avoid concurrent
  * requests invalidating one another. It uses a [kotlin.collections.LinkedHashMap]
  * to keep the tokens in order of expiration. During access any entries which
  * have expired are automatically purged.
  */
-class PersistentTokenCache<T>(expireMillis: Long) {
+class PersistentTokenCache<T>(expireMillis: Long, private val clock: Clock = Clock.systemDefaultZone()) {
     private val expireMillis: Long
     private val map: MutableMap<String, Value>
     private var latestWriteTime: Long
@@ -38,7 +40,7 @@ class PersistentTokenCache<T>(expireMillis: Long) {
         require(expireMillis > 0L)
         this.expireMillis = expireMillis
         map = LinkedHashMap(CAPACITY, LOAD_FACTOR)
-        latestWriteTime = System.currentTimeMillis()
+        latestWriteTime = clock.millis()
     }
 
     /**
@@ -50,7 +52,7 @@ class PersistentTokenCache<T>(expireMillis: Long) {
     operator fun get(key: String): T? {
         purge()
         val value: Value? = map[key]
-        val time = System.currentTimeMillis()
+        val time = clock.millis()
         return if (value != null && time < value.expire) value.token else null
     }
 
@@ -66,7 +68,7 @@ class PersistentTokenCache<T>(expireMillis: Long) {
         if (map.containsKey(key)) {
             map.remove(key)
         }
-        val time = System.currentTimeMillis()
+        val time = clock.millis()
         map[key] = Value(token, time + expireMillis)
         latestWriteTime = time
     }
@@ -86,7 +88,7 @@ class PersistentTokenCache<T>(expireMillis: Long) {
      * before read/write access, but could be manually invoked if desired.
      */
     fun purge() {
-        val time = System.currentTimeMillis()
+        val time = clock.millis()
         if (time - latestWriteTime > expireMillis) {
             // Everything in the map is expired, clear all at once
             map.clear()
@@ -103,5 +105,15 @@ class PersistentTokenCache<T>(expireMillis: Long) {
         }
     }
 
-    private inner class Value(val token: T, val expire: Long)
+    override fun toString(): String {
+        return "PersistentTokenCache(expireMillis=$expireMillis, map=$map, latestWriteTime=$latestWriteTime)"
+    }
+
+    private inner class Value(val token: T, val expire: Long) {
+
+        override fun toString(): String {
+            return "Value(token=$token, expire=$expire)"
+        }
+
+    }
 }

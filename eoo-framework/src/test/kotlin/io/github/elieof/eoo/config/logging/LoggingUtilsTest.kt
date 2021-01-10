@@ -191,7 +191,7 @@ internal class LoggingUtilsTest {
         assertThat(context.copyOfListenerList).extracting("customFields").contains("{\"customFields\": true}")
         assertThat(context.copyOfListenerList).extracting("loggingProperties").contains(loggingProperties)
 
-        loggerContextListener.onStart(context)
+//        loggerContextListener.onStart(context)
 
         val logBookLogger = context.getLogger(LOGGER_LOGBOOK)
         assertThat(logBookLogger).isNotNull

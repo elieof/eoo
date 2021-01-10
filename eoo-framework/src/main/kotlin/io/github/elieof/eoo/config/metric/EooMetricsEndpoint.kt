@@ -22,7 +22,7 @@ public class EooMetricsEndpoint(private val meterRegistry: MeterRegistry) {
     public companion object {
         /** Constant `MISSING_NAME_TAG_MESSAGE="Missing name tag for metric {}"`  */
         public const val MISSING_NAME_TAG_MESSAGE: String = "Missing name tag for metric {}"
-        private const val METRIC_JVM = "jvm.gc.pause"
+        public const val METRIC_JVM = "jvm.gc.pause"
         private const val METRIC_SERVER: String = "http.server.requests"
     }
 

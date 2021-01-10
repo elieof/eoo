@@ -5,6 +5,7 @@ import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration
 import org.springframework.boot.context.properties.EnableConfigurationProperties
+import org.springframework.boot.info.BuildProperties
 import org.springframework.boot.test.context.runner.ApplicationContextRunner
 import org.springframework.cloud.autoconfigure.RefreshAutoConfiguration
 import org.zalando.logbook.Sink
@@ -18,7 +19,7 @@ class EooLoggingAutoConfigurationTest {
     internal class TrivialConfiguration
 
     @Test
-    fun someTest() {
+    fun hasSinkTest() {
         this.contextRunner
             .withPropertyValues("eoo.logging.logstash.enabled=true")
             .withAllowBeanDefinitionOverriding(true)
@@ -32,6 +33,24 @@ class EooLoggingAutoConfigurationTest {
             .run {
                 Assertions.assertThat(it).hasSingleBean(Sink::class.java)
                 Assertions.assertThat(it.getBean(Sink::class.java)).isInstanceOf(LogstashLogbackSink::class.java)
+            }
+    }
+
+    @Test
+    fun someTest() {
+        this.contextRunner
+            .withPropertyValues("eoo.logging.logstash.enabled=true")
+            .withAllowBeanDefinitionOverriding(true)
+            .withBean(BuildProperties::class.java)
+            .withUserConfiguration(
+                TrivialConfiguration::class.java,
+                RefreshAutoConfiguration::class.java,
+                JacksonAutoConfiguration::class.java,
+                LogbookAutoConfiguration::class.java,
+                EooLoggingAutoConfiguration::class.java
+            )
+            .run {
+                Assertions.assertThat(it).hasSingleBean(BuildProperties::class.java)
             }
     }
 }

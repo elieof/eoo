@@ -3,10 +3,7 @@ package io.github.elieof.eoo.config.logging
 import ch.qos.logback.classic.LoggerContext
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.elieof.eoo.config.EooProperties
-import io.github.elieof.eoo.config.logging.LoggingUtils.addAccessFileAppender
-import io.github.elieof.eoo.config.logging.LoggingUtils.addFileAppender
-import io.github.elieof.eoo.config.logging.LoggingUtils.addJsonConsoleAppender
-import io.github.elieof.eoo.config.logging.LoggingUtils.addLogstashTcpSocketAppender
+import io.github.elieof.eoo.config.logging.LoggingUtils.addContextListener
 import net.logstash.logback.encoder.LogstashEncoder
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -47,20 +44,8 @@ class EooLoggingAutoConfiguration(
         buildProperties?.apply { map["version"] = this.version }
         val customFields = mapper.writeValueAsString(map)
 
-        val loggingProperties = eooProperties.logging
+        addContextListener(context, customFields, eooProperties.logging)
 
-        if (loggingProperties.useJsonFormat) {
-            addJsonConsoleAppender(context, customFields)
-        }
-        if (loggingProperties.file.enabled) {
-            addFileAppender(context, loggingProperties.file)
-        }
-        if (loggingProperties.accessFile.enabled) {
-            addAccessFileAppender(context, loggingProperties.accessFile)
-        }
-        if (loggingProperties.logstash.enabled) {
-            addLogstashTcpSocketAppender(context, customFields, loggingProperties.logstash)
-        }
     }
 
     @Bean

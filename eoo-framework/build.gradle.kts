@@ -241,6 +241,7 @@ dependencies {
 
     testImplementation("com.h2database:h2")
     testImplementation(Eoo.Deps.mockk)
+    testImplementation(Eoo.Deps.coroutinesTest)
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude("org.junit.vintage", "junit-vintage-engine")
     }

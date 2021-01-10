@@ -1,5 +1,6 @@
 package io.github.elieof.eoo.config.metric
 
+import io.github.elieof.eoo.config.metric.EooMetricsEndpoint.Companion.METRIC_JVM
 import io.micrometer.core.instrument.MeterRegistry
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -43,7 +44,7 @@ internal class EooMetricsEndpointTest(@Autowired val metricsEndpoint: EooMetrics
             .allSatisfy {
                 it.contains("jvm.gc") || it.contains("classes")
             }
-        assertThat((result.getValue("jvm.gc.pause") as Map<*, *>).keys).isNotEmpty
+        assertThat((result.getValue(METRIC_JVM) as Map<*, *>).keys).isNotEmpty
             .hasSizeGreaterThanOrEqualTo(5)
             .contains("count", "max", "mean", "totalTime")
 

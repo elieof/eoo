@@ -186,6 +186,7 @@ object LoggingUtils {
         val loggerContextListener = LogbackLoggerContextListener(properties, customFields)
         loggerContextListener.context = context
         context.addListener(loggerContextListener)
+        loggerContextListener.onStart(context)
     }
 
     private fun getLogFileName(fileProperties: EooProperties.Logging.File): String {
