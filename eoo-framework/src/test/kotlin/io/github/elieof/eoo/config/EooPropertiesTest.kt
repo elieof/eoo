@@ -590,7 +590,6 @@ internal class EooPropertiesTest {
         assertThat(obj.url).isEqualTo(value)
     }
 
-
     @Test
     fun testServerDescription() {
         val obj = EooProperties.ApiDocs.Server()

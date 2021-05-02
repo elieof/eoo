@@ -18,9 +18,7 @@ import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties
 import org.springframework.core.env.ConfigurableEnvironment
 import org.springframework.core.task.SimpleAsyncTaskExecutor
 import org.springframework.mock.env.MockEnvironment
-import java.util.concurrent.TimeUnit
 import javax.sql.DataSource
-import kotlin.concurrent.withLock
 
 internal class EooLiquibaseAutoConfigurationTest {
 
@@ -74,9 +72,9 @@ internal class EooLiquibaseAutoConfigurationTest {
             .hasFieldOrPropertyWithValue("liquibaseTablespace", liquibaseProperties.liquibaseTablespace)
             .hasFieldOrPropertyWithValue("databaseChangeLogLockTable", liquibaseProperties.databaseChangeLogLockTable)
             .hasFieldOrPropertyWithValue("databaseChangeLogTable", liquibaseProperties.databaseChangeLogTable)
-            .hasFieldOrPropertyWithValue("isDropFirst", liquibaseProperties.isDropFirst)
+            .hasFieldOrPropertyWithValue("dropFirst", liquibaseProperties.isDropFirst)
             .hasFieldOrPropertyWithValue("labels", liquibaseProperties.labels)
-            .hasFieldOrPropertyWithValue("isTestRollbackOnUpdate", liquibaseProperties.isTestRollbackOnUpdate)
+            .hasFieldOrPropertyWithValue("testRollbackOnUpdate", liquibaseProperties.isTestRollbackOnUpdate)
             .extracting { it.dataSource }
             .asInstanceOf(InstanceOfAssertFactories.type(HikariDataSource::class.java))
             .hasFieldOrPropertyWithValue("jdbcUrl", URL_LIQUIBASE)
@@ -90,7 +88,6 @@ internal class EooLiquibaseAutoConfigurationTest {
         Assertions.assertThat(event.message).isEqualTo(EooLiquibaseAutoConfiguration.STARTING_MESSAGE)
         Assertions.assertThat(event.thrown).isNull()
     }
-
 
     @Test
     fun testProfileNoLiquibase() {
@@ -116,5 +113,4 @@ internal class EooLiquibaseAutoConfigurationTest {
         Assertions.assertThat(event.message).isEqualTo(EooLiquibaseAutoConfiguration.DISABLED_MESSAGE)
         Assertions.assertThat(event.thrown).isNull()
     }
-
 }

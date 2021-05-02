@@ -70,7 +70,7 @@ internal class LoggingUtilsTest {
             .asInstanceOf(type(RollingFileAppender::class.java))
             .hasFieldOrPropertyWithValue(
                 "fileName",
-                System.getProperty("java.io.tmpdir") + "/.log"  + "/" + fileProperties.prefix + ".log"
+                System.getProperty("java.io.tmpdir") + "/.log" + "/" + fileProperties.prefix + ".log"
             )
     }
     @Test

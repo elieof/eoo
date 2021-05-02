@@ -98,4 +98,8 @@ open class AsyncSpringLiquibase(
             logger.warn(SLOWNESS_MESSAGE, SLOWNESS_THRESHOLD)
         }
     }
+
+    override fun toString(): String {
+        return "AsyncSpringLiquibase(executor=$executor, env=$env)"
+    }
 }

@@ -114,6 +114,5 @@ class PersistentTokenCache<T>(expireMillis: Long, private val clock: Clock = Clo
         override fun toString(): String {
             return "Value(token=$token, expire=$expire)"
         }
-
     }
 }

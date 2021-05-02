@@ -45,7 +45,6 @@ class EooLoggingAutoConfiguration(
         val customFields = mapper.writeValueAsString(map)
 
         addContextListener(context, customFields, eooProperties.logging)
-
     }
 
     @Bean

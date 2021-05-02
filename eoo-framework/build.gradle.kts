@@ -10,7 +10,7 @@ plugins {
     kotlin("plugin.spring")
     kotlin("kapt") // Required for annotations processing
 
-    id("java")
+    id("java-library")
 //    id("io.spring.dependency-management")
 
     id("org.springframework.boot")
@@ -18,7 +18,7 @@ plugins {
     id("io.gitlab.arturbosch.detekt")
 }
 tasks {
-    named("install") {
+    named("publishToMavenLocal") {
         doLast {
             println(jar.get().archiveFileName.get())
         }
@@ -283,6 +283,45 @@ configurations.all {
             // Force Kotlin to our version
             if (requested.group == "org.jetbrains.kotlin") {
                 useVersion(Eoo.kotlinVersion)
+            }
+        }
+    }
+}
+
+afterEvaluate {
+    listOf(
+        "processResources",
+        "processTestResources",
+        "ktlintMainSourceSetFormat",
+        "ktlintKotlinScriptCheck",
+        "ktlintMainSourceSetCheck",
+        "ktlintTestSourceSetCheck",
+        "runKtlintCheckOverKotlinScripts",
+        "runKtlintCheckOverMainSourceSet",
+        "runKtlintCheckOverTestSourceSet",
+        "runKtlintFormatOverKotlinScripts",
+        "runKtlintFormatOverMainSourceSet",
+        "runKtlintFormatOverTestSourceSet",
+        "ktlintTestSourceSetFormat",
+        "ktlintKotlinScriptFormat",
+        "checkstyleNohttp",
+        "detekt",
+        "compileKotlin",
+    ).forEach { name ->
+        tasks.named(name).configure {
+            if ("runKtlintFormatOverKotlinScripts" != name) {
+                dependsOn("runKtlintFormatOverKotlinScripts")
+            }
+            if ("runKtlintFormatOverKotlinScripts" != name && "runKtlintFormatOverMainSourceSet" != name) {
+                dependsOn("runKtlintFormatOverMainSourceSet")
+            }
+            if ("runKtlintFormatOverKotlinScripts" != name && "runKtlintFormatOverMainSourceSet" != name && "runKtlintFormatOverTestSourceSet" != name) {
+                dependsOn("runKtlintFormatOverTestSourceSet")
+            }
+            if (project.parent != null && project.parent?.name != rootProject.name) {
+                dependsOn(":${project.parent?.name}:runKtlintFormatOverKotlinScripts")
+                dependsOn(":${project.parent?.name}:runKtlintFormatOverMainSourceSet")
+                dependsOn(":${project.parent?.name}:runKtlintFormatOverTestSourceSet")
             }
         }
     }

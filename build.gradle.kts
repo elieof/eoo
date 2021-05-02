@@ -4,7 +4,7 @@ buildscript {
     repositories {
         mavenLocal()
         mavenCentral()
-        jcenter()
+//        jcenter()
         gradlePluginPortal()
         maven { url = uri("https://repo.spring.io/plugins-release") }
     }
@@ -38,7 +38,7 @@ allprojects {
 repositories {
     mavenLocal()
     mavenCentral()
-    jcenter()
+//    jcenter()
     gradlePluginPortal()
     maven { url = uri("https://repo.spring.io/plugins-release") }
 }
@@ -50,7 +50,6 @@ subprojects {
     repositories {
         mavenLocal()
         mavenCentral()
-        jcenter()
         gradlePluginPortal()
         maven { url = uri("https://repo.spring.io/plugins-release") }
     }
@@ -58,7 +57,7 @@ subprojects {
     apply {
         plugin("idea")
 //        plugin("java")
-        plugin("maven")
+//        plugin("maven")
         plugin("maven-publish")
 //        plugin("io.spring.dependency-management")
         plugin("io.spring.nohttp")

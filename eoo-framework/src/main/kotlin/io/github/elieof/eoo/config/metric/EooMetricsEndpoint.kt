@@ -15,7 +15,6 @@ import java.util.function.Consumer
 
 private val logger = KotlinLogging.logger {}
 
-
 @WebEndpoint(id = "eoometrics")
 public class EooMetricsEndpoint(private val meterRegistry: MeterRegistry) {
 
@@ -25,7 +24,6 @@ public class EooMetricsEndpoint(private val meterRegistry: MeterRegistry) {
         public const val METRIC_JVM = "jvm.gc.pause"
         private const val METRIC_SERVER: String = "http.server.requests"
     }
-
 
     /**
      * GET /management/eoo-metrics

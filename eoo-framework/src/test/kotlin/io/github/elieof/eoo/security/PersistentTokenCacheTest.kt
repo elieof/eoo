@@ -47,7 +47,7 @@ class PersistentTokenCacheTest {
     fun testExpires() {
         val cache: PersistentTokenCache<String> = PersistentTokenCache(9L)
         cache.put("key", "val")
-        runBlocking{
+        runBlocking {
             delay(10L)
             assertThat(cache["key"]).isNull()
         }
@@ -92,7 +92,7 @@ class PersistentTokenCacheTest {
     }
 
     @Test
-    fun testPurgeExpiredWithMockK()  {
+    fun testPurgeExpiredWithMockK() {
         val clock: Clock = mockk()
         every { clock.millis() } returnsMany listOf(0L, 0L, 0L, 2000L, 2001L, 4001L)
         val cache: PersistentTokenCache<String> = PersistentTokenCache(4000L, clock)

@@ -7,7 +7,7 @@ import org.springframework.boot.SpringApplication
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
 
-internal class DefaultProfileUtilTest{
+internal class DefaultProfileUtilTest {
 
     @Test
     internal fun testAddDefaultProfile() {
@@ -21,7 +21,8 @@ internal class DefaultProfileUtilTest{
             val value = it.get(app) as MutableMap<String, *>
             Assertions.assertThat(value).isNotNull.isNotEmpty
             Assertions.assertThat(value).containsEntry(
-                DefaultProfileUtil.SPRING_PROFILE_DEFAULT, EooProfiles.SPRING_PROFILE_DEVELOPMENT)
+                DefaultProfileUtil.SPRING_PROFILE_DEFAULT, EooProfiles.SPRING_PROFILE_DEVELOPMENT
+            )
         }
     }
 }
