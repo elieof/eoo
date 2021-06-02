@@ -97,14 +97,20 @@ class SpringfoxAutoconfigurationTest(
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.paths./scanned/test.get.parameters[?(@.name == 'page')]").exists())
             .andExpect(jsonPath("$.paths./scanned/test.get.parameters[?(@.name == 'page')].in").value("query"))
-            .andExpect(jsonPath("$.paths./scanned/test.get.parameters[?(@.name == 'page')].schema.type").value("integer"))
+            .andExpect(
+                jsonPath("$.paths./scanned/test.get.parameters[?(@.name == 'page')].schema.type").value("integer")
+            )
             .andExpect(jsonPath("$.paths./scanned/test.get.parameters[?(@.name == 'size')]").exists())
             .andExpect(jsonPath("$.paths./scanned/test.get.parameters[?(@.name == 'size')].in").value("query"))
-            .andExpect(jsonPath("$.paths./scanned/test.get.parameters[?(@.name == 'size')].schema.type").value("integer"))
+            .andExpect(
+                jsonPath("$.paths./scanned/test.get.parameters[?(@.name == 'size')].schema.type").value("integer")
+            )
             .andExpect(jsonPath("$.paths./scanned/test.get.parameters[?(@.name == 'sort')]").exists())
             .andExpect(jsonPath("$.paths./scanned/test.get.parameters[?(@.name == 'sort')].in").value("query"))
             .andExpect(jsonPath("$.paths./scanned/test.get.parameters[?(@.name == 'sort')].schema.type").value("array"))
-            .andExpect(jsonPath("$.paths./scanned/test.get.parameters[?(@.name == 'sort')].schema.items.type").value("string"))
+            .andExpect(
+                jsonPath("$.paths./scanned/test.get.parameters[?(@.name == 'sort')].schema.items.type").value("string")
+            )
     }
 
     @Test

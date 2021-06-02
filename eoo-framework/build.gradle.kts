@@ -315,7 +315,8 @@ afterEvaluate {
             if ("runKtlintFormatOverKotlinScripts" != name && "runKtlintFormatOverMainSourceSet" != name) {
                 dependsOn("runKtlintFormatOverMainSourceSet")
             }
-            if ("runKtlintFormatOverKotlinScripts" != name && "runKtlintFormatOverMainSourceSet" != name && "runKtlintFormatOverTestSourceSet" != name) {
+            if ("runKtlintFormatOverKotlinScripts" != name && "runKtlintFormatOverMainSourceSet" != name &&
+                "runKtlintFormatOverTestSourceSet" != name) {
                 dependsOn("runKtlintFormatOverTestSourceSet")
             }
             if (project.parent != null && project.parent?.name != rootProject.name) {

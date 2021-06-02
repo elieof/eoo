@@ -1,27 +1,27 @@
 @file:Suppress("MemberVisibilityCanBePrivate")
 
 object Eoo {
-    const val kotlinVersion = "1.4.32"
-    const val coroutinesVersion = "1.4.3"
-    const val gradleVersion = "7.0"
+    const val kotlinVersion = "1.5.10"
+    const val coroutinesVersion = "1.5.0"
+    const val gradleVersion = "7.0.2"
 
-    const val springBootVersion = "2.4.5"
+    const val springBootVersion = "2.4.6"
     const val springDependenciesManagementVersion = "1.0.11.RELEASE"
 
     const val ktlintVersion = "0.41.0"
     const val ktlintGVersion = "10.0.0"
-    const val detektVersion = "1.16.0"
+    const val detektVersion = "1.17.1"
     const val sonarqubeVersion = "3.1.1"
-    const val nohttpVersion = "0.0.7"
+    const val nohttpVersion = "0.0.8"
     const val dokkaVersion = "1.4.32"
 
-    const val awsJavaVersion = "1.11.1008"
-    const val azureSpringCloudClientVersion = "2.3.0"
+    const val awsJavaVersion = "1.11.1030"
+    const val azureSpringCloudClientVersion = "2.4.0"
     const val azureSpringBootVersion = "2.6.3"
     const val bucket4jVersion = "6.2.0"
     const val cassandraUnitVersion = "4.3.1.0"
     const val couchmoveVersion = "3.1"
-    const val cucumberJvmVersion = "6.10.3"
+    const val cucumberJvmVersion = "6.10.4"
     const val commonsIoVersion = "2.8.0"
 
     /**
@@ -32,7 +32,7 @@ object Eoo {
     const val hazelcastVersion = "4.1.1"
     const val hazelcastHibernate53Version = "2.2.0"
     const val hibernateVersion = "5.4.23.Final"
-    const val infinispanVersion = "12.1.1.Final"
+    const val infinispanVersion = "12.1.3.Final"
     const val infinispanSpringBootVersion = "2.2.4.Final"
     const val kotlinLoggingVersion = "2.0.3"
     const val jjwtVersion = "0.11.2"
@@ -48,7 +48,7 @@ object Eoo {
     const val mockitokotlin2Version = "2.2.0"
     const val mockkVersion = "1.10.3-jdk8"
     const val mssqlJdbcVersion = "8.4.1.jre8"
-    const val mysqlVersion = "8.0.24"
+    const val mysqlVersion = "8.0.25"
     const val neo4jVersion = "0.0.13"
     const val oracleVersion = "21.1.0.0"
     const val problemSpringVersion = "0.26.2"
@@ -56,7 +56,7 @@ object Eoo {
     const val redissonVersion = "3.15.4"
     const val reflectionsVersion = "0.9.11"
     const val springDataReleaseTrainVersion = "Moore-SR7"
-    const val springCloudVersion = "2020.0.2"
+    const val springCloudVersion = "2020.0.3"
     const val springCloudNetflixVersion = "2.2.8.RELEASE"
 
     const val springDataNeo4jVersion = "1.1.1"
