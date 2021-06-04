@@ -110,27 +110,6 @@ subprojects {
         version.set(Eoo.ktlintVersion)
         disabledRules.set(setOf("import-ordering", "no-wildcard-imports"))
     }
-
-    tasks.withType<org.jlleitschuh.gradle.ktlint.tasks.GenerateReportsTask> {
-        dependsOn(tasks.runKtlintFormatOverKotlinScripts)
-    }
-
-    tasks.withType<org.jlleitschuh.gradle.ktlint.tasks.KtLintFormatTask> {
-        if (name != "runKtlintFormatOverKotlinScripts") {
-            dependsOn(tasks.runKtlintFormatOverKotlinScripts)
-            var parentProject = parent
-            if (parentProject != null) {
-                if (parentProject.name != rootProject.name && parentProject.plugins.hasPlugin(
-                        "org.jlleitschuh.gradle.ktlint"
-                    )
-                ) {
-                    dependsOn("${parentProject.path}:runKtlintFormatOverKotlinScripts")
-                }
-                parentProject = parentProject.parent
-            }
-        }
-    }
-
 }
 
 nohttp {

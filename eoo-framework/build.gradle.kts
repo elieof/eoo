@@ -128,7 +128,7 @@ sonarToken?.let {
 }
 tasks.dokkaJavadoc {
     outputDirectory.set(buildDir.resolve("$buildDir/dokka"))
-    dependsOn(tasks.runKtlintFormatOverMainSourceSet)
+//    dependsOn(tasks.runKtlintFormatOverMainSourceSet)
 }
 
 val dokkaJar by tasks.creating(Jar::class) {
@@ -136,21 +136,12 @@ val dokkaJar by tasks.creating(Jar::class) {
     description = "Assembles Kotlin docs with Dokka"
     archiveClassifier.set("javadoc")
     from(tasks.dokkaJavadoc)
-    dependsOn(tasks.runKtlintFormatOverMainSourceSet)
+//    dependsOn(tasks.runKtlintFormatOverMainSourceSet)
 }
 
 val sourcesJar by tasks.creating(Jar::class) {
     archiveClassifier.set("sources")
     from(sourceSets.main.get().allSource)
-    dependsOn(tasks.runKtlintFormatOverMainSourceSet)
-}
-
-tasks.processResources {
-    dependsOn(tasks.runKtlintFormatOverMainSourceSet)
-}
-
-tasks.processTestResources {
-    dependsOn(tasks.runKtlintFormatOverMainSourceSet)
 }
 
 val projectName = name
@@ -235,7 +226,6 @@ dependencies {
     implementation(Eoo.Deps.coroutines)
 
     kapt(Eoo.Deps.Spring.Boot.configurationProcessor)
-//    kapt("org.springframework.boot:spring-boot-configuration-processor")
     kapt(Eoo.Deps.hibernateJpaModelGen)
 
     implementation("org.springframework.boot:spring-boot-autoconfigure")
@@ -298,7 +288,7 @@ configurations.all {
         }
     }
 }
-/*
+
 afterEvaluate {
     listOf(
         "processResources",
@@ -338,4 +328,4 @@ afterEvaluate {
             }
         }
     }
-}*/
+}
